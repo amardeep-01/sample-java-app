@@ -1,0 +1,39 @@
+name: Deploy Servlet App
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+jobs:
+   deploy:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup JDK
+      uses: actions/setup-java@v2
+      with:
+           java-version: '11'
+           distribution: 'adopt'
+           java-package: 'jdk'
+           architecture: 'x64'
+           check-latest: false
+           server-id: 'github'
+           server-username: ${{ github.actor }}
+           server-password: ${{ secrets.GITHUB_TOKEN }}
+           overwrite-settings: true
+           job-status: 'success'
+
+    - name: Build with Maven
+      run: mvn clean package
+
+    - name: Copy WAR file to IIS directory
+      run: |
+        # Copy the WAR file to the directory where IIS is configured for Java Servlet applications
+
+    - name: Restart IIS
+      run: |
+        # Restart IIS to apply changes
