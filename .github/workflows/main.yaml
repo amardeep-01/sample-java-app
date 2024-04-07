@@ -30,6 +30,7 @@ jobs:
     - name: Build with Maven
       run: mvn clean package
        dir
+       
 
     - name: Copy WAR file to IIS directory
       run: |
