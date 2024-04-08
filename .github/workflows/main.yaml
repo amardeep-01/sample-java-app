@@ -44,19 +44,18 @@ jobs:
     - name: Copy WAR file to IIS directory
       shell: cmd
       run: |
-        dir   REM Checking current directory contents for debugging purposes
-        jps -m  REM List Java processes with their main class and arguments
+        dir   
+        jps -m  
 
-        REM Kill the Java process associated with "sample-0.0.1-SNAPSHOT.jar"
+  
         for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
         del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F  REM Remove the .txt extension
 
   
-        copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java" /Y  REM /Y to suppress confirmation prompt
+        copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java" 
 
     
-        dir C:\java  REM Checking directory contents after copying the file
-
+        dir C:\java  
        
         
     - name: Restart IIS
