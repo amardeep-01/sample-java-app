@@ -22,7 +22,7 @@ jobs:
 
     - name: Install Maven
       run: |
-        curl -k -o apache-maven-3.8.4-bin.zip https://apache.mirror.digitalpacific.com.au/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.zip
+       Invoke-WebRequest -Uri "https://apache.mirror.digitalpacific.com.au/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.zip" -OutFile "apache-maven-3.8.4-bin.zip" -SkipCertificateCheck
         Expand-Archive -Path apache-maven-3.8.4-bin.zip -DestinationPath "C:\"
         mv "C:\apache-maven-3.8.4" "C:\Maven"
         $env:PATH = "C:\Maven\bin;$env:PATH"
