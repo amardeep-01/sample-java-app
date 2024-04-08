@@ -35,6 +35,15 @@ jobs:
        dir   # Checking current directory contents for debugging purposes
        # icacls "C:\java\sample-0.0.1-SNAPSHOT.jar" /grant:r "Users:(RWX)"
        jps
+       # Get the process ID (PID) of the Java process named "MyApp"
+       $javaProcess = Get-Process -Name "java" | Where-Object { $_.MainWindowTitle -like "*MyApp*" }
+       if ($javaProcess -ne $null) {
+          $javaPID = $javaProcess.Id
+          Write-Output "PID of MyApp: $javaPID"
+        } else {
+          Write-Output "MyApp is not running."
+        }
+  
        Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force  # Remove the .txt extension
        Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" -Destination "C:\java" -Force
        dir C:\java  # Checking directory contents after copying the file
