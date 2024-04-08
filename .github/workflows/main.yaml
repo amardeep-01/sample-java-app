@@ -45,6 +45,7 @@ jobs:
         cd ../../../../../..
         dir
         cd java
+        dir
         del "C:/java/sample-0.0.1-SNAPSHOT.jar"
         dir
         cd ..
