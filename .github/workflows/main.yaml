@@ -35,11 +35,11 @@ jobs:
        dir   # Checking current directory contents for debugging purposes
        # icacls "C:\java\sample-0.0.1-SNAPSHOT.jar" /grant:r "Users:(RWX)"
        jps
-       # Get the process ID (PID) of the Java process named "MyApp"
-       $javaProcess = Get-Process -Name "java" | Where-Object { $_.MainWindowTitle -like "*MyApp*" }
+       # Get the process ID (PID) of the Java process named "sample-0.0.1-SNAPSHOT.jar"
+       $javaProcess = Get-Process -Name "java" | Where-Object { $_.MainWindowTitle -like "*sample-0.0.1-SNAPSHOT.jar*" }
        if ($javaProcess -ne $null) {
           $javaPID = $javaProcess.Id
-          Write-Output "PID of MyApp: $javaPID"
+          Write-Output "PID of sample-0.0.1-SNAPSHOT.jar: $javaPID"
         } else {
           Write-Output "MyApp is not running."
         }
