@@ -34,7 +34,7 @@ jobs:
       run: |
        dir C:\java  # Checking current directory contents for debugging purposes
        # icacls "C:\java\sample-0.0.1-SNAPSHOT.jar" /grant:r "Users:(RWX)"
-       del "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force # Remove the .txt extension
+       Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force  # Remove the .txt extension
        Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" -Destination "C:\java" -Force
        dir C:\java  # Checking directory contents after copying the file
        
