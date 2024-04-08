@@ -50,9 +50,9 @@ jobs:
         del "C:/java/sample-0.0.1-SNAPSHOT.jar.txt"
         dir
         cd ..
-        cd C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target
+        # cd C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target
      
-        Copy-Item -Path "D:\a\sample-java-app\sample-java-app\target\  java -jar sample-0.0.1-SNAPSHOT.jar.txt" -Destination "C:/java" -Force
+        Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target java -jar sample-0.0.1-SNAPSHOT.jar.txt" -Destination "C:/java" -Force
           
         
     - name: Restart IIS
