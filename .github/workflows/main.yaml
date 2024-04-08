@@ -1,4 +1,4 @@
-ame: Deploy Servlet App
+name: Deploy Servlet App
 
 on:
   push:
