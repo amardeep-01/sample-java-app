@@ -44,9 +44,12 @@ jobs:
       run: |
         cd ../../../../../..
         dir
-        cd target
-        dir
+        cd java
         del "C:/java/sample-0.0.1-SNAPSHOT.jar"
+        dir
+        cd ..
+        cd C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target
+     
         Copy-Item -Path "D:\a\sample-java-app\sample-java-app\target\  java -jar sample-0.0.1-SNAPSHOT.jar" -Destination "C:/java" -Force
           
         
