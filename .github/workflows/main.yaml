@@ -2,26 +2,33 @@ name: Deploy Servlet App
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
   pull_request:
-    branches: [main]
+    branches: [dev]
+
 jobs:
-   deploy: 
+  deploy:
     runs-on: self-hosted
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Set up JDK and Maven
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
         java-version: '11'
-        maven-version: '3.8.1'
+
+    - name: Install Maven
+      run: |
+        curl -o apache-maven-3.8.4-bin.zip https://apache.mirror.digitalpacific.com.au/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.zip
+        Expand-Archive -Path apache-maven-3.8.4-bin.zip -DestinationPath "C:\"
+        mv "C:\apache-maven-3.8.4" "C:\Maven"
+        $env:PATH = "C:\Maven\bin;$env:PATH"
 
     - name: Build with Maven
-      run: mvn clean package   
+      run: mvn clean package
 
     - name: Copy WAR file to IIS directory
       run: |
