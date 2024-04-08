@@ -46,6 +46,7 @@ jobs:
         dir
         cd java
         dir
+        icacls "C:\java\sample-0.0.1-SNAPSHOT.jar" /grant:r "Users:(RWX)"
         del "C:/java/sample-0.0.1-SNAPSHOT.jar"
         dir
         cd ..
