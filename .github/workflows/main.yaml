@@ -54,7 +54,8 @@ jobs:
     - name: Run JAR file
       shell: powershell
       run: |
-    
-         cd "C:\java"
-         java -jar sample-0.0.1-SNAPSHOT.jar
+        cd "C:\java"
+        Start-Job -ScriptBlock {  & java -jar  sample-0.0.1-SNAPSHOT.jar >console.out 2>console.err}
+         # cd "C:\java"
+         # java -jar sample-0.0.1-SNAPSHOT.jar
 
