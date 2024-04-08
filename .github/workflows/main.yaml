@@ -29,7 +29,7 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean package
-       dir
+      
     # - name: Install Maven
     #   run: |
     #      Invoke-WebRequest -Uri "https://apache.mirror.digitalpacific.com.au/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.zip" -OutFile "apache-maven-3.8.4-bin.zip" -UseBasicParsing
