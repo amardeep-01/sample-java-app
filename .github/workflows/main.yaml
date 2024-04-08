@@ -1,21 +1,19 @@
-name: Deploy Servlet App
+ame: Deploy Servlet App
 
 on:
   push:
-    branches: [dev,main]
+    branches: [dev]
   pull_request:
-    branches: [dev,main]
-
+    branches: [dev]
 jobs:
-  deploy:
-    runs-on: self-hosted
-
+   deploy:
+    runs-on: windows-latest
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Setup JDKd
+    - name: Setup JDK
       uses: actions/setup-java@v2
       with:
            java-version: '11'
@@ -28,6 +26,10 @@ jobs:
            server-password: ${{ secrets.GITHUB_TOKEN }}
            overwrite-settings: true
            job-status: 'success'
+
+    - name: Build with Maven
+      run: mvn clean package
+       dir
     # - name: Install Maven
     #   run: |
     #      Invoke-WebRequest -Uri "https://apache.mirror.digitalpacific.com.au/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.zip" -OutFile "apache-maven-3.8.4-bin.zip" -UseBasicParsing
