@@ -1,0 +1,136 @@
+name: ACHIEVE-UI-CICD
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'dev_v*' 
+      - 'uat_v*'  
+      - 'prod_v*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Select Environment
+        options:
+          - DEV
+          - QA
+          - UAT
+
+jobs: 
+  deploy:
+    if: github.event_name != 'workflow_dispatch' && !startsWith(github.ref, 'refs/tags/')
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          java-package: 'jdk'
+          architecture: 'x64'
+          check-latest: false
+          server-id: 'github'
+          server-username: ${{ github.actor }}
+          server-password: ${{ secrets.GITHUB_TOKEN }}
+          overwrite-settings: true
+          job-status: 'success'
+
+      - name: Build with Maven
+        run: mvn clean package
+      
+  deploymentjob:
+    name: Deployment Job
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    runs-on: self-hosted
+    steps:
+      - name: Determine Environment
+        id: env
+        if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+        run: |
+          Write-Output "Event Name: $env:GITHUB_EVENT_NAME"
+          Write-Output "Ref: $env:GITHUB_REF"
+          if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+            Write-Output "::set-output name=env::${{ github.event.inputs.environment }}"
+          } elseif ($env:GITHUB_REF -match '^refs/tags/') {
+            $TAG = $env:GITHUB_REF
+            Write-Output "Tag: $TAG"
+            if ($TAG -match '^refs/tags/dev_v*') {
+              $ENV = "DEV"
+              Write-Output "::set-output name=env::$ENV"
+            } elseif ($TAG -match '^refs/tags/uat_v*') {
+              $ENV = "UAT"
+              Write-Output "Environment: $ENV"
+              Write-Output "::set-output name=env::$ENV"
+            } elseif ($TAG -match '^refs/tags/prod_v*') {
+              $ENV = "QA"
+              Write-Output "::set-output name=env::$ENV"
+            }
+          }
+
+          Write-Output "ENV: $ENV"
+          
+      - name: Bulding
+        run: |
+          $ENV = "${{ steps.env.outputs.env }}"
+          echo "Environment: $ENV"
+          if ($ENV -eq "DEV") {
+            mvn clean package
+          } elseif ($ENV -eq "QA") {
+            mvn clean package
+          } elseif ($ENV -eq "UAT") {
+            mvn clean package
+          }
+
+      - name: Deploy to dev
+        if: success()
+        shell: cmd
+        run: |
+          $ENV = "${{ steps.env.outputs.env }}"
+          echo "Environment: $ENV"
+          if ($ENV -eq "DEV") {
+            jps 
+            for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
+            del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
+            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
+            jps
+          } elseif ($ENV -eq "QA") {
+            jps 
+            for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
+            del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
+            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
+            jps
+          } elseif ($ENV -eq "UAT") {
+            jps 
+            for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
+            del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
+            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
+            jps
+          } else {
+            Write-Output "Invalid environment"
+            exit 1
+          }
+
+      - name: Deploy to dev
+        if: success()
+        shell: powershell
+        run: |
+          $ENV = "${{ steps.env.outputs.env }}"
+          echo "Environment: $ENV"
+          if ($ENV -eq "DEV") {
+            cd "C:\java"
+            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
+          } elseif ($ENV -eq "QA") {
+            cd "C:\java"
+            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
+          } elseif ($ENV -eq "UAT") {
+            cd "C:\java"
+            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
+          } else {
+            Write-Output "Invalid environment"
+            exit 1
+          }
