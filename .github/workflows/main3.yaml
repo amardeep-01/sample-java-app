@@ -88,10 +88,9 @@ jobs:
 
       - name: Deploy to iis
         if: success()
-        shell: cmd
+        shell: pwsh
         run: 
           $ENV = "${{ steps.env.outputs.env }}"
-          echo "Environment:$ENV"
            if ($ENV -eq "DEV") {
             jps 
             for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
