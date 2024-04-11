@@ -1,4 +1,4 @@
-name: ACHIEVE-UI-CICD
+name: ACHIEVE-Service-CICD
 
 on:
   push:
@@ -18,8 +18,8 @@ on:
           - QA
           - UAT
 
-jobs: 
-  deploy:
+jobs:
+  build-and-test:
     if: github.event_name != 'workflow_dispatch' && !startsWith(github.ref, 'refs/tags/')
     runs-on: self-hosted
     steps:
@@ -44,10 +44,10 @@ jobs:
         run: mvn clean package
       
   deploymentjob:
-    name: Deployment Job
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
-    runs-on: self-hosted
-    steps:
+     name: Deployment Job
+     if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+     runs-on: self-hosted
+     steps:
       - name: Determine Environment
         id: env
         if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
@@ -117,7 +117,7 @@ jobs:
 
       - name: Deploy to dev
         if: success()
-        shell: powershell
+        shell: pwsh
         run: |
           $ENV = "${{ steps.env.outputs.env }}"
           echo "Environment: $ENV"
