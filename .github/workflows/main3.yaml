@@ -100,36 +100,28 @@ jobs:
 
       - name: Deploy to iis
         if: success()
-        shell: pwsh
-        run: 
-          $ENV = "${{ steps.env.outputs.env }}"
-           if ($ENV -eq "DEV") {
-            mvn clean package
-            jps 
-            for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
-            del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
-            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
+        shell: pwsh  # Specify the shell
+        run: |
+          $ENV = "DEV"
+          if ($ENV -eq "DEV") {
             jps
-            
-          } 
-          elseif ($ENV -eq "QA") {
-            jps 
-            for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
-            del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
-            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
+            foreach ($pid in (Get-Process -Name "java" | Where-Object { $_.MainModule.FileName -like "*sample-0.0.1-SNAPSHOT.jar" }).Id) {
+              Stop-Process -Id $pid -Force
+            }
+            Remove-Item -Path "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
+            Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" -Destination "C:\java" -Force
             jps
-          } 
-          elseif ($ENV -eq "UAT") {
-            jps 
-            for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
-            del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
-            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
+          } elseif ($ENV -eq "QA") {
             jps
-          } 
-          else {
+            # Your QA commands here
+          } elseif ($ENV -eq "UAT") {
+            jps
+            # Your UAT commands here
+          } else {
             Write-Output "Invalid environment"
             exit 1
           }
+
           
       - name: restarting powershell
          if:success()
