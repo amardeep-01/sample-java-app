@@ -98,23 +98,23 @@ jobs:
           $ENV = "${{ steps.env.outputs.env }}"
           echo "Environment: $ENV"
           if ($ENV -eq "DEV") {
-           jps 
-          for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
-          del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
-          copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
-          jps
-          
+             jps 
+            for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
+            del "C:\demo-java\sample-0.0.1-SNAPSHOT.jar" /F
+            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\demo-java"
+            jps
           } elseif ($ENV -eq "QA") {
-            jps 
-           for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
-           del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
-           copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
-           jps
+           jps 
+            for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
+            del "C:\demo-java\sample-0.0.1-SNAPSHOT.jar" /F
+            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\demo-java"
+            jps
+         
           } elseif ($ENV -eq "UAT") {
              jps 
             for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
-            del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
-            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
+            del "C:\demo-java\sample-0.0.1-SNAPSHOT.jar" /F
+            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\demo-java"
             jps
           } else {
             Write-Output "Invalid environment"
@@ -129,16 +129,16 @@ jobs:
           $ENV = "${{ steps.env.outputs.env }}"
           echo "Environment: $ENV"
           if ($ENV -eq "DEV") {
-           cd "C:\java"
+           cd "C:\demo-java"
            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
         
            
           } elseif ($ENV -eq "QA") {
-             cd "C:\java"
+             cd "C:\demo-java"
            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
         
           } elseif ($ENV -eq "UAT") {
-              cd "C:\java"
+              cd "C:\demo-java"
               Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
         
           } else {
