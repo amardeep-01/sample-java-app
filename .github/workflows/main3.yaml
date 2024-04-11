@@ -74,17 +74,18 @@ jobs:
 
           Write-Output "ENV: $ENV"
           
-      # - name: Bulding
-      #   run: |
-      #     $ENV = "${{ steps.env.outputs.env }}"
-      #     echo "Environment: $ENV"
-      #     if ($ENV -eq "DEV") {
-      #       mvn clean package
-      #     } elseif ($ENV -eq "QA") {
-      #       mvn clean package
-      #     } elseif ($ENV -eq "UAT") {
-      #       mvn clean package
-      #     }
+      - name: Bulding
+        run: |
+          $ENV = "${{ steps.env.outputs.env }}"
+          echo "Environment: $ENV"
+          if ($ENV -eq "DEV") {
+            cd C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app
+            mvn clean package
+          } elseif ($ENV -eq "QA") {
+            mvn clean package
+          } elseif ($ENV -eq "UAT") {
+            mvn clean package
+          }
       # - name: Building
       #   run: |
       #     $ENV = "${{ steps.env.outputs.env }}"
