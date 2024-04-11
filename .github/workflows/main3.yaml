@@ -86,7 +86,7 @@ jobs:
             mvn clean package
           }
 
-      - name: Deploy to dev
+      - name: Deploy to iis
         if: success()
         shell: cmd
         run: 
@@ -119,7 +119,7 @@ jobs:
             exit 1
           }
           
-      - name: Deploy to dev
+      - name: restarting powershell
          if:success()
         shell: pwsh
         run: |
