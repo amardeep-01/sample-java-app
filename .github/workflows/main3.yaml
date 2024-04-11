@@ -85,17 +85,17 @@ jobs:
       #     } elseif ($ENV -eq "UAT") {
       #       mvn clean package
       #     }
-      - name: Building
-        run: |
-          $ENV = "${{ steps.env.outputs.env }}"
-          echo "Environment: $ENV"
-          if ($ENV -eq "DEV") {
-            mvn clean package
-          } elseif ($ENV -eq "QA") {
-            mvn clean package
-          } elseif ($ENV -eq "UAT") {
-            mvn clean package
-          }
+      # - name: Building
+      #   run: |
+      #     $ENV = "${{ steps.env.outputs.env }}"
+      #     echo "Environment: $ENV"
+      #     if ($ENV -eq "DEV") {
+      #       mvn clean package
+      #     } elseif ($ENV -eq "QA") {
+      #       mvn clean package
+      #     } elseif ($ENV -eq "UAT") {
+      #       mvn clean package
+      #     }
 
       - name: Deploy to iis
         if: success()
@@ -103,6 +103,7 @@ jobs:
         run: 
           $ENV = "${{ steps.env.outputs.env }}"
            if ($ENV -eq "DEV") {
+            mvn clean package
             jps 
             for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
             del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
