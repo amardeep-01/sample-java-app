@@ -105,17 +105,17 @@ jobs:
             )
             del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
             copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
-          ) else if "%ENV%"=="QA" (
+           ) else if "%ENV%"=="QA" (
             del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
             copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
-          ) else if "%ENV%"=="UAT" (
+           ) else if "%ENV%"=="UAT" (
             del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
             copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
-          ) else (
+           ) else (
             echo Invalid environment
             exit /b 1
-          )
-
+           )
+ 
     
        - name: restarting powershell
          shell: powershell
