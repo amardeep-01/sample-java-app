@@ -93,7 +93,7 @@ jobs:
          shell: cmd
          run: |
          
-         
+          set ENV=%DEV%
   
           if "%ENV%"=="DEV" (
             jps
