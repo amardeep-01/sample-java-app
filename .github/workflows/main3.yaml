@@ -93,7 +93,7 @@ jobs:
          shell: cmd
          run: |
          
-          set ENV=%{{ steps. env.outputs.env }}
+          set ENV=%{{ steps.env.outputs.env }}
   
           if "%ENV%"=="DEV" (
             jps
