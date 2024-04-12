@@ -96,15 +96,15 @@ jobs:
           if ($ENV -eq "DEV") {
             mvn clean package
             Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
-            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java" -Force
+            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\final-java-dev" -Force
           } elseif ($ENV -eq "QA") {
             mvn clean package
             Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
-            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java" -Force
+            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\final-java-qa" -Force
           } elseif ($ENV -eq "UAT") {
             mvn clean package
             Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
-            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java" -Force
+            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\final-java-uat" -Force
           }
 
       
@@ -117,13 +117,13 @@ jobs:
           $ENV = "${{ steps.env.outputs.env }}"
           echo "Environment: $ENV"
           if ($ENV -eq "DEV") {
-            cd "C:\java"
+            cd "C:\final-java-dev"
             Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
           } elseif ($ENV -eq "QA") {
-            cd "C:\java"
+            cd "C:\final-java-qa"
             Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
           } elseif ($ENV -eq "UAT") {
-            cd "C:\java"
+            cd "C:\final-java-uat"
             Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
           } else {
             Write-Output "Invalid environment"
