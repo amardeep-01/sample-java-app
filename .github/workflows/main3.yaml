@@ -93,7 +93,9 @@ jobs:
          shell: cmd
          run: |
           
-          set ENV=%{{ steps.env.outputs.env }}
+       
+          set ENV=%steps.env.outputs.env%
+
           if "%ENV%"=="DEV" (
             jps
             for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do (
