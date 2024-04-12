@@ -95,15 +95,15 @@ jobs:
           echo "Environment: $ENV"
           if ($ENV -eq "DEV") {
             mvn clean package
-            Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
+            Remove-Item "C:\final-java-dev\sample-0.0.1-SNAPSHOT.jar" -Force
             Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\final-java-dev" -Force
           } elseif ($ENV -eq "QA") {
             mvn clean package
-            Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
+            Remove-Item "C:\final-java-qa\sample-0.0.1-SNAPSHOT.ja" -Force
             Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\final-java-qa" -Force
           } elseif ($ENV -eq "UAT") {
             mvn clean package
-            Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
+            Remove-Item "C:\final-java-uat\sample-0.0.1-SNAPSHOT.jar" -Force
             Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\final-java-uat" -Force
           }
 
