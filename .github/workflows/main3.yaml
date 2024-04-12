@@ -93,10 +93,11 @@ jobs:
          shell: cmd
          run: |
          
-          set ENV=DEV
+     
+          set ENV=%[ENV]%
 
   
-          if "%ENV%"=="DEV" (
+          if "ENV"=="DEV" (
             jps
             for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do (
               taskkill /F /PID %%i
