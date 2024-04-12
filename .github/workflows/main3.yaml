@@ -82,7 +82,7 @@ jobs:
           $ENV = "${{ steps.env.outputs.env }}"
           echo "Environment: $ENV"
           if ($ENV -eq "DEV") {
-            cd C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app
+            # cd C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app
             mvn clean package
           } elseif ($ENV -eq "QA") {
             mvn clean package
