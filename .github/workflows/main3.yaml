@@ -93,8 +93,9 @@ jobs:
          shell: cmd
          run: |
          
-     
-          set ENV=%[ENV]%
+          @echo off
+          setx ENV "%steps.env.outputs.env%"
+          
 
   
           if "ENV"=="DEV" (
