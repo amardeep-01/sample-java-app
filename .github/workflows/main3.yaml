@@ -89,82 +89,38 @@ jobs:
           } elseif ($ENV -eq "UAT") {
             mvn clean package
           }
-      # - name: Building
-      #   run: |
-      #     $ENV = "${{ steps.env.outputs.env }}"
-      #     echo "Environment: $ENV"
-      #     if ($ENV -eq "DEV") {
-      #       mvn clean package
-      #     } elseif ($ENV -eq "QA") {
-      #       mvn clean package
-      #     } elseif ($ENV -eq "UAT") {
-      #       mvn clean package
-      #     }
-      
+  
        - name: Copy WAR file to IIS directory
           shell:cmd
          run: |
-          # $ENV = "${{ steps.env.outputs.env }}"
-          # if ($ENV -eq "DEV") {
-          # jps 
-          # for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
-          # del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
-          # copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
-          # jps
-          # }
-          @echo off
-          set ENV=%{{ steps.env.outputs.env }}
-          if "%ENV%"=="DEV" (
-            jps 
-            for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( 
-             taskkill /F /PID %%i
-           )
+          $ENV = "${{ steps.env.outputs.env }}"
+          if ($ENV -eq "DEV") {
+          jps 
+          for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do ( taskkill /F /PID %%i)
           del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
           copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
           jps
-          )
+          }
+       
 
-      # - name: Deploy to iis
-      #   if: success()
-      #   shell: pwsh  # Specify the shell
-      #   run: |
-      #     $ENV = "DEV"
-      #     if ($ENV -eq "DEV") {
-      #       jps
-      #       foreach ($pid in (Get-Process -Name "java" | Where-Object { $_.MainModule.FileName -like "*sample-0.0.1-SNAPSHOT.jar" }).Id) {
-      #         Stop-Process -Id $pid -Force
-      #       }
-      #       Remove-Item -Path "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
-      #       Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" -Destination "C:\java" -Force
-      #       jps
-      #     } elseif ($ENV -eq "QA") {
-      #       jps
-      #       # Your QA commands here
-      #     } elseif ($ENV -eq "UAT") {
-      #       jps
-      #       # Your UAT commands here
-      #     } else {
-      #       Write-Output "Invalid environment"
-      #       exit 1
-      #     }
-
+   
           
-      # - name: restarting powershell
-      #    if:success()
-      #   shell: pwsh
-      #   run: |
-      #     $ENV = "${{ steps.env.outputs.env }}"
-      #     echo "Environment: $ENV"
-      #     if ($ENV -eq "DEV") {
-      #       cd "C:\java"
-      #       Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
-      #     } elseif ($ENV -eq "QA") {
-      #       cd "C:\java"
-      #       Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
-      #     } elseif ($ENV -eq "UAT") {
-      #       cd "C:\java"
-      #       Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
-      #     } else {
-      #       Write-Output "Invalid environment"
-      #       exit 1
-      #     }
+       - name: restarting powershell
+          if:success()
+         shell: pwsh
+         run: |
+          $ENV = "${{ steps.env.outputs.env }}"
+          echo "Environment: $ENV"
+          if ($ENV -eq "DEV") {
+            cd "C:\java"
+            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
+          } elseif ($ENV -eq "QA") {
+            cd "C:\java"
+            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
+          } elseif ($ENV -eq "UAT") {
+            cd "C:\java"
+            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
+          } else {
+            Write-Output "Invalid environment"
+            exit 1
+         }
