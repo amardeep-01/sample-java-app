@@ -77,13 +77,17 @@ jobs:
 
           Write-Output "ENV: $ENV"
 
-       - name: stop running java process
+       - name: Stop running Java process
          shell: cmd
          run: |
-            jps
-            for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do (
-              taskkill /F /PID %%i
-            )   
+          @echo off
+          echo Stopping running Java process...
+          jps
+          for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do (
+            taskkill /F /PID %%i
+          )
+          echo Java process stopped.
+
           
        - name: Bulding
          run: |
