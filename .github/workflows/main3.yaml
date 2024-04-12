@@ -103,12 +103,7 @@ jobs:
           )
 
     
-       
-
-   
-          
        - name: restarting powershell
-          if:success()
          shell: pwsh
          run: |
           $ENV = "${{ steps.env.outputs.env }}"
@@ -125,4 +120,4 @@ jobs:
           } else {
             Write-Output "Invalid environment"
             exit 1
-           }
+          }
