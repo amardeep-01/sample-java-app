@@ -92,8 +92,7 @@ jobs:
        - name: Copy WAR file to IIS directory
          shell: cmd
          run: |
-          # set ENV=%{{ steps.env.outputs.env }}
-          # set ENV=%{{ steps.env.outputs.env }}
+         
           set ENV=%{{ steps. env.outputs.env }}
   
           if "%ENV%"=="DEV" (
