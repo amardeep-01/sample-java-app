@@ -104,7 +104,7 @@ jobs:
 
     
        - name: restarting powershell
-         shell: pwsh
+         shell: powershell
          run: |
           $ENV = "${{ steps.env.outputs.env }}"
           echo "Environment: $ENV"
