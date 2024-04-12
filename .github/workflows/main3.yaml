@@ -105,22 +105,22 @@ jobs:
 
    
           
-       - name: restarting powershell
-          if:success()
-         shell: pwsh
-         run: |
-          $ENV = "${{ steps.env.outputs.env }}"
-          echo "Environment: $ENV"
-          if ($ENV -eq "DEV") {
-            cd "C:\java"
-            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
-          } elseif ($ENV -eq "QA") {
-            cd "C:\java"
-            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
-          } elseif ($ENV -eq "UAT") {
-            cd "C:\java"
-            Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
-          } else {
-            Write-Output "Invalid environment"
-            exit 1
-         }
+       # - name: restarting powershell
+       #    if:success()
+       #   shell: pwsh
+       #   run: |
+       #    $ENV = "${{ steps.env.outputs.env }}"
+       #    echo "Environment: $ENV"
+       #    if ($ENV -eq "DEV") {
+       #      cd "C:\java"
+       #      Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
+       #    } elseif ($ENV -eq "QA") {
+       #      cd "C:\java"
+       #      Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
+       #    } elseif ($ENV -eq "UAT") {
+       #      cd "C:\java"
+       #      Start-Process java -ArgumentList '-jar', 'sample-0.0.1-SNAPSHOT.jar'
+       #    } else {
+       #      Write-Output "Invalid environment"
+       #      exit 1
+       #   }
