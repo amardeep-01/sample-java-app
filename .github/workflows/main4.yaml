@@ -26,19 +26,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Setup JDK
-        uses: actions/setup-java@v2 
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-          java-package: 'jdk'
-          architecture: 'x64'
-          check-latest: false
-          server-id: 'github'
-          server-username: ${{ github.actor }}
-          server-password: ${{ secrets.GITHUB_TOKEN }}
-          overwrite-settings: true
-          job-status: 'success'
+      # - name: Setup JDK
+      #   uses: actions/setup-java@v2 
+      #   with:
+      #     java-version: '11'
+      #     distribution: 'adopt'
+      #     java-package: 'jdk'
+      #     architecture: 'x64'
+      #     check-latest: false
+      #     server-id: 'github'
+      #     server-username: ${{ github.actor }}
+      #     server-password: ${{ secrets.GITHUB_TOKEN }}
+      #     overwrite-settings: true
+      #     job-status: 'success'
 
       - name: Build with Maven
         run: mvn clean package
