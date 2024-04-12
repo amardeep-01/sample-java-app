@@ -82,7 +82,6 @@ jobs:
           $ENV = "${{ steps.env.outputs.env }}"
           echo "Environment: $ENV"
           if ($ENV -eq "DEV") {
-            # cd C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app
             mvn clean package
           } elseif ($ENV -eq "QA") {
             mvn clean package
@@ -93,7 +92,7 @@ jobs:
        - name: Copy WAR file to IIS directory
          shell: cmd
          run: |
-          $ENV = "${{ steps.env.outputs.env }}"
+          set ENV=%{{ steps.env.outputs.env }}
           if "%ENV%"=="DEV" (
           jps
           for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do (
