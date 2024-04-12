@@ -69,7 +69,7 @@ jobs:
               $ENV = "UAT"
               Write-Output "Environment: $ENV"
               Write-Output "::set-output name=env::$ENV"
-            } elseif ($TAG -match '^refs/tags/prod_v*') {
+            } elseif ($TAG -match '^refs/tags/qa_v*') {
               $ENV = "QA"
               Write-Output "::set-output name=env::$ENV"
             }
