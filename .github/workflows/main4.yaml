@@ -89,23 +89,23 @@ jobs:
           echo Java process stopped.
 
           
-       - name: Bulding
+       - name: Building
          run: |
           $ENV = "${{ steps.env.outputs.env }}"
           echo "Environment: $ENV"
           if ($ENV -eq "DEV") {
             mvn clean package
-             del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
-            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
+            Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
+            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java" -Force
           } elseif ($ENV -eq "QA") {
             mvn clean package
-             del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
-            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
+            Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
+            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java" -Force
           } elseif ($ENV -eq "UAT") {
             mvn clean package
-             del "C:\java\sample-0.0.1-SNAPSHOT.jar" /F
-            copy "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java"
-          } 
+            Remove-Item "C:\java\sample-0.0.1-SNAPSHOT.jar" -Force
+            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\sample-0.0.1-SNAPSHOT.jar" "C:\java" -Force
+          }
 
       
            
