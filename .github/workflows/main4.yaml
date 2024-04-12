@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - '**'
-    tags:
+    tags: 
       - 'dev_v*' 
       - 'uat_v*'  
       - 'prod_v*'
