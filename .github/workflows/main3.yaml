@@ -92,14 +92,10 @@ jobs:
        - name: Copy WAR file to IIS directory
          shell: cmd
          run: |
-          
-       
-          set ENV=%steps.env.outputs.env%
-          echo ENV is set to %ENV%
-          echo Value of steps.env.outputs.env: %steps.env.outputs.env%
-
-
-
+          # set ENV=%{{ steps.env.outputs.env }}
+          # set ENV=%{{ steps.env.outputs.env }}
+          set ENV=%{{ steps. env.outputs.env }}
+  
           if "%ENV%"=="DEV" (
             jps
             for /f "tokens=1" %%i in ('jps -m ^| find "sample-0.0.1-SNAPSHOT"') do (
