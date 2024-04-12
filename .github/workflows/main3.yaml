@@ -95,7 +95,8 @@ jobs:
          
           @echo off
           setx ENV "%steps.env.outputs.env%"
-          
+          echo %ENV%
+
 
   
           if "ENV"=="DEV" (
