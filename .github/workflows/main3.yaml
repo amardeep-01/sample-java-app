@@ -87,7 +87,7 @@ jobs:
             mvn clean package
           } elseif ($ENV -eq "UAT") {
             mvn clean package
-          }
+          } 
 
        - name: Copy WAR file to IIS directory
          shell: cmd
