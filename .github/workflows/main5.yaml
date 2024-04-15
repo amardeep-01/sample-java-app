@@ -1,0 +1,150 @@
+name: ACHIEVE-Service-CICD
+
+on:
+  push:
+    branches:
+      - '**'
+    tags: 
+      - 'dev_v*' 
+      - 'uat_v*'  
+      - 'qa_v*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Select Environment
+        options:
+          - DEV
+          - QA
+          - UAT
+
+jobs:
+  build-and-test:
+    if: github.event_name != 'workflow_dispatch' && !startsWith(github.ref, 'refs/tags/')
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      # - name: Setup JDK
+      #   uses: actions/setup-java@v2 
+      #   with:
+      #     java-version: '11'
+      #     distribution: 'adopt'
+      #     java-package: 'jdk'
+      #     architecture: 'x64'
+      #     check-latest: false
+      #     server-id: 'github'
+      #     server-username: ${{ github.actor }}
+      #     server-password: ${{ secrets.GITHUB_TOKEN }}
+      #     overwrite-settings: true
+      #     job-status: 'success'
+
+      - name: Build with Maven
+        run: mvn clean package
+      
+  deploymentjob:
+     name: Deployment Job
+     if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+     runs-on: self-hosted
+     steps:
+       - name: Checkout Repository
+         uses: actions/checkout@v2
+        
+       - name: Determine Environment
+         id: env
+         if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+         run: |
+          Write-Output "Event Name: $env:GITHUB_EVENT_NAME"
+          Write-Output "Ref: $env:GITHUB_REF"
+          if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+            Write-Output "::set-output name=env::${{ github.event.inputs.environment }}"
+          } elseif ($env:GITHUB_REF -match '^refs/tags/') {
+            $TAG = $env:GITHUB_REF
+            Write-Output "Tag: $TAG"
+            if ($TAG -match '^refs/tags/dev_v*') {
+              $ENV = "DEV"
+              Write-Output "::set-output name=env::$ENV"
+            } elseif ($TAG -match '^refs/tags/uat_v*') {
+              $ENV = "UAT"
+              Write-Output "Environment: $ENV"
+              Write-Output "::set-output name=env::$ENV"
+            } elseif ($TAG -match '^refs/tags/qa_v*') {
+              $ENV = "QA"
+              Write-Output "::set-output name=env::$ENV"
+            }
+          }
+
+          Write-Output "ENV: $ENV"
+
+       - name: Stop running Java process
+         shell: cmd
+         run: |
+          @echo off
+          echo Stopping running Java process...
+          jps
+          for /f "tokens=1" %%i in ('jps -m ^| find "achieve-0.0.1-SNAPSHOT"') do (
+            taskkill /F /PID %%i
+          )
+          echo Java process stopped.
+
+          
+       - name: Building
+         run: |
+          $ENV = "${{ steps.env.outputs.env }}"
+          echo "Environment: $ENV"
+          if ($ENV -eq "DEV") {
+            mvn clean package
+            Remove-Item "C:\final-java-dev\achieve-0.0.1-SNAPSHOT.jar" -Force
+            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.jar" "C:\final-java-dev" -Force
+          } elseif ($ENV -eq "QA") {
+            mvn clean package
+            Remove-Item "C:\final-java-qa\achieve-0.0.1-SNAPSHOT.jar" -Force
+            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.jar" "C:\final-java-qa" -Force
+          } elseif ($ENV -eq "UAT") {
+            mvn clean package
+            Remove-Item "C:\final-java-uat\achieve-0.0.1-SNAPSHOT.jar" -Force
+            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.jar" "C:\final-java-uat" -Force
+          }
+
+      
+           
+           
+    
+       # - name: restarting powershell
+       #   shell: powershell
+       #   run: |
+       #    $ENV = "${{ steps.env.outputs.env }}"
+       #    echo "Environment: $ENV"
+       #    if ($ENV -eq "DEV") {
+       #      cd "C:\final-java-dev"
+       #      Start-Process java -ArgumentList '-jar', 'achieve-0.0.1-SNAPSHOT.jar'
+       #    } elseif ($ENV -eq "QA") {
+       #      cd "C:\final-java-qa"
+       #      Start-Process java -ArgumentList '-jar', 'achieve-0.0.1-SNAPSHOT.jar'
+       #    } elseif ($ENV -eq "UAT") {
+       #      cd "C:\final-java-uat"
+       #      Start-Process java -ArgumentList '-jar', 'achieve-0.0.1-SNAPSHOT.jar'
+       #    } else {
+       #      Write-Output "Invalid environment"
+       #      exit 1
+       #    }
+
+       - name: Restarting Command Prompt
+          shell: cmd
+          run: |
+            set ENV=${{ steps.env.outputs.env }}
+            echo Environment: %ENV%
+            if "%ENV%" == "DEV" (
+              cd /D "D:\Dev Environment\Achieve_API"
+              start java -jar achieve-0.0.1-SNAPSHOT.war
+            ) elseif "%ENV%" == "QA" (
+              cd /D "D:\Dev Environment\Achieve_API"
+              start java -jar achieve-0.0.1-SNAPSHOT.war
+            ) elseif "%ENV%" == "UAT" (
+              cd /D "D:\Dev Environment\Achieve_API"
+              start java -jar achieve-0.0.1-SNAPSHOT.war
+            ) else (
+              echo Invalid environment
+              exit /b 1
+            )
