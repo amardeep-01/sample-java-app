@@ -106,7 +106,8 @@ jobs:
        #      shell: powershell
 
        - name: Restarting powershell
+         shell: pwsh
          run: |
               & "C:\Dev Environment\Achieve_API\ak.bat"
-              shell: powershell
+         
 
