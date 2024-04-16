@@ -82,8 +82,8 @@ jobs:
           echo "Environment: $ENV"
           if ($ENV -eq "DEV") {
             mvn clean package
-            Remove-Item "D:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
-            Copy-Item -Path "achieve-service\target\achieve-0.0.1-SNAPSHOT.war" -Destination "D:\Dev Environment\Achieve_API"  -Force
+            Remove-Item "C:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
+            Copy-Item -Path "achieve-service\target\achieve-0.0.1-SNAPSHOT.war" -Destination "C:\Dev Environment\Achieve_API"  -Force
            }
           # elseif ($ENV -eq "QA") {
           #   mvn clean package
