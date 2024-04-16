@@ -103,4 +103,5 @@ jobs:
           # Set-Location "C:\Dev Environment\Achieve_API"
           # Start-Process -FilePath "C:\Program Files\Java\jdk-22\bin\java.exe" -ArgumentList "-jar", "achieve-0.0.1-SNAPSHOT.war"
            C:\Dev Environment\Achieve_API\ak.bat
+            shell: powershell
 
