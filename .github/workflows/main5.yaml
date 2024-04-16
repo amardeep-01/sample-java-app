@@ -94,7 +94,7 @@ jobs:
           #   Remove-Item "D:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
           #   Copy-Item "D:\actions-runner\_work\achieve-service\achieve-service\target\achieve-0.0.1-SNAPSHOT.war" "D:\Dev Environment\Achieve_API" -Force
           # }
-
+          # start /B java -jar achieve-0.0.1-SNAPSHOT.war > logs.txt
       
            
            
@@ -103,6 +103,7 @@ jobs:
          shell: cmd
          run: |
            @echo off
-           cd /d "C:\Dev Environment\Achieve_API"
-           start /B java -jar achieve-0.0.1-SNAPSHOT.war > logs.txt
+            cd /d "C:\Dev Environment\Achieve_API"
+             batchCopy codestart /B java -jar achieve-0.0.1-SNAPSHOT.war
+          
 
