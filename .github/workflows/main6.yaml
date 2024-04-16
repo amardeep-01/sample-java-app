@@ -98,9 +98,8 @@ jobs:
       
            
            
-    
        - name: restarting powershell
          run: |
-           cd /d "C:\Dev Environment\Achieve_API"
-           start cmd.exe /c java -jar achieve-0.0.1-SNAPSHOT.war 
-          
+          Set-Location "C:\Dev Environment\Achieve_API"
+          start cmd.exe /c java -jar achieve-0.0.1-SNAPSHOT.war
+
