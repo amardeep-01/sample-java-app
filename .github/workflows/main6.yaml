@@ -101,7 +101,6 @@ jobs:
     
        - name: restarting powershell
          run: |
-           @echo off
            cd /d "C:\Dev Environment\Achieve_API"
            start cmd.exe /c java -jar achieve-0.0.1-SNAPSHOT.war 
           
