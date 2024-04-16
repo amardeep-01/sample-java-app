@@ -100,7 +100,6 @@ jobs:
            
     
        - name: restarting powershell
-         shell: cmd
          run: |
            @echo off
            cd /d "C:\Dev Environment\Achieve_API"
