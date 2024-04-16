@@ -101,5 +101,6 @@ jobs:
        - name: restarting powershell
          run: |
           Set-Location "C:\Dev Environment\Achieve_API"
-          start cmd.exe /c java -jar achieve-0.0.1-SNAPSHOT.war
+          Start-Process -FilePath "C:\Program Files\Java\jdk-22\bin\java.exe" -ArgumentList "-jar", "achieve-0.0.1-SNAPSHOT.war"
+
 
