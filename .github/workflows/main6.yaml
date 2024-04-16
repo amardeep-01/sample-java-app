@@ -121,4 +121,6 @@ jobs:
          shell: cmd
          run: |
           dir
+          cd C:\Dev Environment\Achieve_API
+          dir
           javaw -jar achieve-0.0.1-SNAPSHOT.war
