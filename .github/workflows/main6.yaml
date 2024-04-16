@@ -104,4 +104,5 @@ jobs:
          run: |
            @echo off
            cd /d "C:\Dev Environment\Achieve_API"
-           ak.bat
+           start ak.bat
+          
