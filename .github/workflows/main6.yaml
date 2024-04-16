@@ -120,4 +120,5 @@ jobs:
        - name: Stop running Java process
          shell: cmd
          run: |
+          dir
           javaw -jar achieve-0.0.1-SNAPSHOT.war
