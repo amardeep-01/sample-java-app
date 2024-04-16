@@ -105,11 +105,11 @@ jobs:
        #     cd C:\Dev Environment\Achieve_API\ak.bat
        #      shell: powershell
 
-       - name: Restarting powershell
-         shell: powershell
-         run: |
-          Start-Process cmd -Args /c,"java -jar achieve-0.0.1-SNAPSHOT.war" `
-          -WindowStyle Hidden -RSI console.out -RSE console.err
+       # - name: Restarting powershell
+       #   shell: powershell
+       #   run: |
+       #    Start-Process cmd -Args /c,"java -jar achieve-0.0.1-SNAPSHOT.war" `
+       #    -WindowStyle Hidden -RSI console.out -RSE console.err
 
          # -name: restarting powershell
          #  shell: powershell
@@ -117,4 +117,7 @@ jobs:
          #      
           
            # & "C:\Dev Environment\Achieve_API\ak.bat"
-
+       - name: Stop running Java process
+         shell: cmd
+         run: |
+          start  /min java -jar  achieve-0.0.1-SNAPSHOT.war
