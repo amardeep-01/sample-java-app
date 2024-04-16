@@ -104,6 +104,6 @@ jobs:
          run: |
            @echo off
             cd /d "C:\Dev Environment\Achieve_API"
-             batchCopy codestart /B java -jar achieve-0.0.1-SNAPSHOT.war
+             javaw -jar achieve-0.0.1-SNAPSHOT.war
           
 
