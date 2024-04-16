@@ -105,5 +105,8 @@ jobs:
            @echo off
             cd /d "C:\Dev Environment\Achieve_API"
              start javaw -jar achieve-0.0.1-SNAPSHOT.war
-          
+
+       - name: restarting powershell     
+         run: |
+          echo "deployment completed"
 
