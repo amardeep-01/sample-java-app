@@ -120,4 +120,4 @@ jobs:
        - name: Stop running Java process
          shell: cmd
          run: |
-          start  /min java -jar  achieve-0.0.1-SNAPSHOT.war
+          javaw -jar achieve-0.0.1-SNAPSHOT.war
