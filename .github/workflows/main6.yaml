@@ -123,4 +123,4 @@ jobs:
           dir
           cd C:\Dev Environment\Achieve_API
           dir
-          javaw -jar achieve-0.0.1-SNAPSHOT.war
+          start "" javaw -jar achieve-0.0.1-SNAPSHOT.war
