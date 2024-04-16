@@ -1,12 +1,13 @@
+
 name: ACHIEVE-Service-CICD
 
 on:
   push:
     branches:
       - '**'
-    tags: 
+    tags:  
       - 'dev_v*' 
-      - 'uat_v*'  
+      - 'uat_v*'   
       - 'qa_v*'
   workflow_dispatch:
     inputs:
@@ -25,20 +26,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
-      # - name: Setup JDK
-      #   uses: actions/setup-java@v2 
-      #   with:
-      #     java-version: '11'
-      #     distribution: 'adopt'
-      #     java-package: 'jdk'
-      #     architecture: 'x64'
-      #     check-latest: false
-      #     server-id: 'github'
-      #     server-username: ${{ github.actor }}
-      #     server-password: ${{ secrets.GITHUB_TOKEN }}
-      #     overwrite-settings: true
-      #     job-status: 'success'
 
       - name: Build with Maven
         run: mvn clean package
@@ -83,7 +70,7 @@ jobs:
           @echo off
           echo Stopping running Java process...
           jps
-          for /f "tokens=1" %%i in ('jps -m ^| find "achieve-0.0.1-SNAPSHOT"') do (
+          for /f "tokens=1" %%i in ('jps -m ^| find "war"') do (
             taskkill /F /PID %%i
           )
           echo Java process stopped.
@@ -95,56 +82,26 @@ jobs:
           echo "Environment: $ENV"
           if ($ENV -eq "DEV") {
             mvn clean package
-            Remove-Item "C:\final-java-dev\achieve-0.0.1-SNAPSHOT.jar" -Force
-            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.jar" "C:\final-java-dev" -Force
-          } elseif ($ENV -eq "QA") {
-            mvn clean package
-            Remove-Item "C:\final-java-qa\achieve-0.0.1-SNAPSHOT.jar" -Force
-            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.jar" "C:\final-java-qa" -Force
-          } elseif ($ENV -eq "UAT") {
-            mvn clean package
-            Remove-Item "C:\final-java-uat\achieve-0.0.1-SNAPSHOT.jar" -Force
-            Copy-Item "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.jar" "C:\final-java-uat" -Force
-          }
+            Remove-Item "D:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
+            Copy-Item -Path "achieve-service\target\achieve-0.0.1-SNAPSHOT.war" -Destination "D:\Dev Environment\Achieve_API"  -Force
+           }
+          # elseif ($ENV -eq "QA") {
+          #   mvn clean package
+          #   Remove-Item "D:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
+          #   Copy-Item "D:\actions-runner\_work\achieve-service\achieve-service\target\achieve-0.0.1-SNAPSHOT.war" "D:\Dev Environment\Achieve_API" -Force
+          # } elseif ($ENV -eq "UAT") {
+          #   mvn clean package
+          #   Remove-Item "D:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
+          #   Copy-Item "D:\actions-runner\_work\achieve-service\achieve-service\target\achieve-0.0.1-SNAPSHOT.war" "D:\Dev Environment\Achieve_API" -Force
+          # }
 
       
            
            
     
-       # - name: restarting powershell
-       #   shell: powershell
-       #   run: |
-       #    $ENV = "${{ steps.env.outputs.env }}"
-       #    echo "Environment: $ENV"
-       #    if ($ENV -eq "DEV") {
-       #      cd "C:\final-java-dev"
-       #      Start-Process java -ArgumentList '-jar', 'achieve-0.0.1-SNAPSHOT.jar'
-       #    } elseif ($ENV -eq "QA") {
-       #      cd "C:\final-java-qa"
-       #      Start-Process java -ArgumentList '-jar', 'achieve-0.0.1-SNAPSHOT.jar'
-       #    } elseif ($ENV -eq "UAT") {
-       #      cd "C:\final-java-uat"
-       #      Start-Process java -ArgumentList '-jar', 'achieve-0.0.1-SNAPSHOT.jar'
-       #    } else {
-       #      Write-Output "Invalid environment"
-       #      exit 1
-       #    }
-
-       - name: Restarting Command Prompt
-          shell: cmd
-          run: |
-            set ENV=${{ steps.env.outputs.env }}
-            echo Environment: %ENV%
-            if "%ENV%" == "DEV" (
-              cd /D "D:\Dev Environment\Achieve_API"
-              start java -jar achieve-0.0.1-SNAPSHOT.war
-            ) elseif "%ENV%" == "QA" (
-              cd /D "D:\Dev Environment\Achieve_API"
-              start java -jar achieve-0.0.1-SNAPSHOT.war
-            ) elseif "%ENV%" == "UAT" (
-              cd /D "D:\Dev Environment\Achieve_API"
-              start java -jar achieve-0.0.1-SNAPSHOT.war
-            ) else (
-              echo Invalid environment
-              exit /b 1
-            )
+       - name: restarting powershell
+         shell: cmd
+         run: |
+           @echo off
+           cd /d "C:\Dev Environment\Achieve_API"
+           java -jar achieve-0.0.1-SNAPSHOT.war
