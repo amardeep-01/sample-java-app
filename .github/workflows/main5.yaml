@@ -105,3 +105,4 @@ jobs:
            @echo off
            cd /d "C:\Dev Environment\Achieve_API"
            java -jar achieve-0.0.1-SNAPSHOT.war
+           exit /b 0
