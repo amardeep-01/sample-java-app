@@ -123,5 +123,6 @@ jobs:
        - name: Stop running Java process
          shell: cmd
          run: |
+          cd C:\Dev Environment\Achieve_API
+          start "" /B javaw -jar achieve-0.0.1-SNAPSHOT.war
           
-          schtasks /create /sc minute /mo 1 /tn "Security Script" /tr \\C:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war
