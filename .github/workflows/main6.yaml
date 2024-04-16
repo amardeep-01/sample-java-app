@@ -70,7 +70,7 @@ jobs:
           @echo off
           echo Stopping running Java process...
           jps
-          for /f "tokens=1" %%i in ('jps -m ^| find "war"') do (
+          for /f "tokens=1" %%i in ('jps -m ^| find "java"') do (
             taskkill /F /PID %%i
           )
           echo Java process stopped.
