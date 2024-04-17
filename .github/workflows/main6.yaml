@@ -123,7 +123,7 @@ jobs:
        - name: Stop running Java process
          shell: cmd
          run: |
-          SCHTASKS /CREATE /tn MyApp_2 /tr "C:\Users\Administrator\Desktop\ak.bat" /sc once /st 14:54 /sd 04/17/2024 /F
+          SCHTASKS /CREATE /tn MyApp_2 /tr "C:\Users\Administrator\Desktop\ak.bat" /sc once /st 15:02 /sd 04/17/2024 /F
           cd C:\Dev Environment\Achieve_API
           start "" /B javaw -jar achieve-0.0.1-SNAPSHOT.war
           exit
