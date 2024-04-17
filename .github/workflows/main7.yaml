@@ -1,0 +1,148 @@
+
+name: ACHIEVE-Service-CICD
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:  
+      - 'dev_v*' 
+      - 'uat_v*'   
+      - 'qa_v*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Select Environment
+        options:
+          - DEV
+          - QA
+          - UAT
+
+jobs:
+  build-and-test:
+    if: github.event_name != 'workflow_dispatch' && !startsWith(github.ref, 'refs/tags/')
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build with Maven
+        run: mvn clean package
+      
+  deploymentjob:
+     name: Deployment Job
+     if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+     runs-on: self-hosted
+     steps:
+       - name: Checkout Repository
+         uses: actions/checkout@v2
+        
+       - name: Determine Environment
+         id: env
+         if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+         run: |
+          Write-Output "Event Name: $env:GITHUB_EVENT_NAME"
+          Write-Output "Ref: $env:GITHUB_REF"
+          if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+            Write-Output "::set-output name=env::${{ github.event.inputs.environment }}"
+          } elseif ($env:GITHUB_REF -match '^refs/tags/') {
+            $TAG = $env:GITHUB_REF
+            Write-Output "Tag: $TAG"
+            if ($TAG -match '^refs/tags/dev_v*') {
+              $ENV = "DEV"
+              Write-Output "::set-output name=env::$ENV"
+            } elseif ($TAG -match '^refs/tags/uat_v*') {
+              $ENV = "UAT"
+              Write-Output "Environment: $ENV"
+              Write-Output "::set-output name=env::$ENV"
+            } elseif ($TAG -match '^refs/tags/qa_v*') {
+              $ENV = "QA"
+              Write-Output "::set-output name=env::$ENV"
+            }
+          }
+
+          Write-Output "ENV: $ENV"
+          # for /f "tokens=1" %%i in ('jps -m ^| find "java.exe"') do (
+          #   taskkill /F /PID %%i
+          # )
+
+       - name: Stop running Java process
+         shell: cmd
+         run: |
+          @echo off
+          echo Stopping running Java process...
+          jps
+          taskkill /f /im java.exe
+          echo Java process stopped.
+
+          
+       - name: Building
+         run: |
+          $ENV = "${{ steps.env.outputs.env }}"
+          echo "Environment: $ENV"
+          if ($ENV -eq "DEV") {
+            mvn clean package
+            Remove-Item "C:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
+            Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.war" -Destination "C:\Dev Environment\Achieve_API"  -Force
+           }
+          # elseif ($ENV -eq "QA") {
+          #   mvn clean package
+          #   Remove-Item "D:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
+          #   Copy-Item "D:\actions-runner\_work\achieve-service\achieve-service\target\achieve-0.0.1-SNAPSHOT.war" "D:\Dev Environment\Achieve_API" -Force
+          # } elseif ($ENV -eq "UAT") {
+          #   mvn clean package
+          #   Remove-Item "D:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
+          #   Copy-Item "D:\actions-runner\_work\achieve-service\achieve-service\target\achieve-0.0.1-SNAPSHOT.war" "D:\Dev Environment\Achieve_API" -Force
+          # }
+
+      
+           
+           
+       # - name: restarting powershell
+       #   run: |
+       #    # Set-Location "C:\Dev Environment\Achieve_API"
+       #    # Start-Process -FilePath "C:\Program Files\Java\jdk-22\bin\java.exe" -ArgumentList "-jar", "achieve-0.0.1-SNAPSHOT.war"
+       #     cd C:\Dev Environment\Achieve_API\ak.bat
+       #      shell: powershell
+
+       # - name: Restarting powershell
+       #   shell: powershell
+       #   run: |
+       #    Start-Process cmd -Args /c,"java -jar achieve-0.0.1-SNAPSHOT.war" `
+       #    -WindowStyle Hidden -RSI console.out -RSE console.err
+
+         # -name: restarting powershell
+         #  shell: powershell
+         #  run: |
+         #      
+          # dir
+
+          # dir
+          # start "" javaw -jar achieve-0.0.1-SNAPSHOT.war
+           # & "C:\Dev Environment\Achieve_API\ak.bat"
+       - name: Stop running Java process
+         shell: cmd
+         run: |
+          @echo off
+          setlocal
+          
+          REM Get current time in HH:MM format
+          for /f "tokens=1-2 delims=:" %%a in ("%time%") do (
+              set /a "hour=10%%a %% 100"  & REM Add 100 to ensure leading zero is kept
+              set "minute=%%b"
+          )
+          
+          REM Add 2 minutes to the current time
+          set /a "minute=minute+2"
+          if %minute% geq 60 (
+              set /a "hour=hour+1"
+              set /a "minute=minute-60"
+          )
+          if %hour% lss 10 set "hour=0%hour%"
+          if %minute% lss 10 set "minute=0%minute%"
+          
+          REM Create the scheduled task
+          SCHTASKS /CREATE /tn MyApp_2 /tr "C:\Users\Administrator\Desktop\ak.bat" /sc once /st %hour%:%minute% /sd 04/17/2024 /F
+          
+          endlocal
