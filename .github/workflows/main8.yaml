@@ -86,41 +86,22 @@ jobs:
             Remove-Item "C:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
             Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.war" -Destination "C:\Dev Environment\Achieve_API"  -Force
            }
-          # elseif ($ENV -eq "QA") {
-          #   mvn clean package
-          #   Remove-Item "D:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
-          #   Copy-Item "D:\actions-runner\_work\achieve-service\achieve-service\target\achieve-0.0.1-SNAPSHOT.war" "D:\Dev Environment\Achieve_API" -Force
-          # } elseif ($ENV -eq "UAT") {
-          #   mvn clean package
-          #   Remove-Item "D:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
-          #   Copy-Item "D:\actions-runner\_work\achieve-service\achieve-service\target\achieve-0.0.1-SNAPSHOT.war" "D:\Dev Environment\Achieve_API" -Force
-          # }
+          elseif ($ENV -eq "QA") {
+           mvn clean package
+            Remove-Item "C:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
+            Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.war" -Destination "C:\Dev Environment\Achieve_API"  -Force
+           }
+          } elseif ($ENV -eq "UAT") {
+           mvn clean package
+            Remove-Item "C:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
+            Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.war" -Destination "C:\Dev Environment\Achieve_API"  -Force
+           }
+          }
 
       
            
            
-       # - name: restarting powershell
-       #   run: |
-       #    # Set-Location "C:\Dev Environment\Achieve_API"
-       #    # Start-Process -FilePath "C:\Program Files\Java\jdk-22\bin\java.exe" -ArgumentList "-jar", "achieve-0.0.1-SNAPSHOT.war"
-       #     cd C:\Dev Environment\Achieve_API\ak.bat
-       #      shell: powershell
-
-       # - name: Restarting powershell
-       #   shell: powershell
-       #   run: |
-       #    Start-Process cmd -Args /c,"java -jar achieve-0.0.1-SNAPSHOT.war" `
-       #    -WindowStyle Hidden -RSI console.out -RSE console.err
-
-         # -name: restarting powershell
-         #  shell: powershell
-         #  run: |
-         #      
-          # dir
-
-          # dir
-          # start "" javaw -jar achieve-0.0.1-SNAPSHOT.war
-           # & "C:\Dev Environment\Achieve_API\ak.bat"
+    
        - name: Stop running Java process
          shell: cmd
          run: |
