@@ -91,12 +91,12 @@ jobs:
             Remove-Item "C:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
             Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.war" -Destination "C:\Dev Environment\Achieve_API"  -Force
            }
-          } elseif ($ENV -eq "UAT") {
+           elseif ($ENV -eq "UAT") {
            mvn clean package
             Remove-Item "C:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
             Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.war" -Destination "C:\Dev Environment\Achieve_API"  -Force
            }
-          }
+          
 
       
            
