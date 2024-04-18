@@ -83,8 +83,8 @@ jobs:
           echo "Environment: $ENV"
           if ($ENV -eq "DEV") {
             mvn clean package
-            Remove-Item "C:\Dev Environment\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
-            Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.war" -Destination "C:\Dev Environment\Achieve_API"  -Force
+            Remove-Item "C:\Dev En\Achieve_API\achieve-0.0.1-SNAPSHOT.war" -Force
+            Copy-Item -Path "C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app\target\achieve-0.0.1-SNAPSHOT.war" -Destination "C:\Dev En\Achieve_API"  -Force
            }
           elseif ($ENV -eq "QA") {
            mvn clean package
@@ -129,4 +129,4 @@ jobs:
           if !second! lss 10 set "second=0!second!"
           
           REM Create the scheduled task
-          SCHTASKS /CREATE /tn MyApp_2 /tr "C:\Users\Administrator\Desktop\ak.bat" /sc once /st !hour!:!minute!:!second! /sd !date! /F
+          SCHTASKS /CREATE /tn MyApp_2 /tr "C:\Dev En\Achieve_API\ak.bat" /sc once /st !hour!:!minute!:!second! /sd !date! /F
