@@ -129,5 +129,6 @@ jobs:
        - name: Stop running Java process
          shell: cmd
          run: |
+           cd C:\Users\Administrator\actions-runner\_work\sample-java-app\sample-java-app
            sheduler.bat
          
