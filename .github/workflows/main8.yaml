@@ -129,4 +129,4 @@ jobs:
           if !second! lss 10 set "second=0!second!"
           
           REM Create the scheduled task
-          SCHTASKS /CREATE /tn MyApp_2 /tr "C:\Dev En\Achieve_API\ak.bat" /sc once /st !hour!:!minute!:!second! /sd !date! /F
+          SCHTASKS /CREATE /tn MyApp_2 /tr "\"C:\Dev En\Achieve_API\ak.bat\"" /sc once /st !hour!:!minute!:!second! /sd !date! /F
