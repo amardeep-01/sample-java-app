@@ -77,19 +77,26 @@ jobs:
        #    echo Java process stopped.
 
        - name: Check if Java process is running
+         id: check-java
+         run: |
+          $output = jps
+          if ($output -match "java.exe") {
+            echo "Java process is running."
+            echo "::set-output name=java_running::true"
+          } else {
+            echo "Java process is not running."
+            echo "::set-output name=java_running::false"
+          }
+
+       - name: Stop Java process
+         if: steps.check-java.outputs.java_running == 'true'
          shell: cmd
          run: |
-          @echo off
-          echo Checking if Java process is running...
-          jps | find "java.exe" > nul
-          if not errorlevel 1 (
-            echo Stopping running Java process...
-            jps
-            taskkill /f /im java.exe
-            echo Java process stopped.
-          )
-          echo Proceeding to the next step...
-
+           @echo off
+           echo Stopping running Java process...
+           jps
+           taskkill /f /im java.exe
+           echo Java process stopped.
 
 
           
