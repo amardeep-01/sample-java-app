@@ -79,7 +79,7 @@ jobs:
        - name: Check if Java process is running
          id: check-java
          run: |
-          $output = jps
+          $output = tasklist
           if ($output -match "java.exe") {
             echo "Java process is running."
             echo "::set-output name=java_running::true"
