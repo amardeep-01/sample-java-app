@@ -77,18 +77,18 @@ jobs:
        #    echo Java process stopped.
 
        - name: Check if Java process is running
-          shell: cmd
-             run: |
-            @echo off
-            echo Checking if Java process is running...
-            jps | find "java.exe" > nul
-            if not errorlevel 1 (
-              echo Stopping running Java process...
-              jps
-              taskkill /f /im java.exe
-              echo Java process stopped.
-            )
-            echo Proceeding to the next step...
+         shell: cmd
+         run: |
+          @echo off
+          echo Checking if Java process is running...
+          jps | find "java.exe" > nul
+          if not errorlevel 1 (
+            echo Stopping running Java process...
+            jps
+            taskkill /f /im java.exe
+            echo Java process stopped.
+          )
+          echo Proceeding to the next step...
 
 
 
