@@ -67,14 +67,31 @@ jobs:
           #   taskkill /F /PID %%i
           # )
 
+       # - name: Stop running Java process
+       #   shell: cmd
+       #   run: |
+       #    @echo off
+       #    echo Stopping running Java process...
+       #    jps
+       #    taskkill /f /im java.exe
+       #    echo Java process stopped.
+
        - name: Stop running Java process
          shell: cmd
          run: |
-          @echo off
-          echo Stopping running Java process...
-          jps
-          taskkill /f /im java.exe
-          echo Java process stopped.
+            @echo off
+            echo Checking if Java process is running...
+            jps | find "java.exe" > nul
+            if errorlevel 1 (
+              echo Java process is not running. Continuing with the workflow...
+              REM You can add additional steps here if needed.
+            ) else (
+              echo Stopping running Java process...
+              jps
+              taskkill /f /im java.exe
+              echo Java process stopped.
+            )
+
 
           
        - name: Building
