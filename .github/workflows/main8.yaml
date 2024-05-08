@@ -4,7 +4,7 @@ name: ACHIEVE-Service-CICD
 on:
   push:
     branches:
-      - '**'
+      - '**' 
     tags:  
       - 'dev_v*'  
       - 'uat_v*'   
