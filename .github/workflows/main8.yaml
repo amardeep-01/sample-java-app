@@ -33,7 +33,7 @@ jobs:
   deploymentjob:
      name: Deployment Job
      if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
-     runs-on: self-hosted
+     runs-on: [ self-hosted, deploy ]
      steps:
        - name: Checkout Repository
          uses: actions/checkout@v2
