@@ -8,7 +8,7 @@ on:
     tags:  
       - 'dev_v*'  
       - 'uat_v*'   
-      - 'qa_v*'
+      - 'qa_v*' 
   workflow_dispatch:
     inputs:
       environment:
