@@ -53,13 +53,11 @@ jobs:
             }
           }
           Write-Host "ENV: $env:ENV"
-        outputs:
-                environment: ${{ steps.env.outputs.env }}
- 
+       
   dev_deployment:
     name: DEV Deployment
     needs: deploymentjob
-    if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
+    if: ${{ env.ENV == 'DEV' }}
     runs-on: [self-hosted, dev-test]
     steps:
       - name: Deploy to DEV
