@@ -55,21 +55,24 @@ jobs:
           Write-Host "ENV: $env:ENV"
 
   dev_deployment:
-     name: DEV Deployment
-     needs: deploymentjob
-     if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
-     runs-on: [self-hosted, dev-test]
-     steps:
-     - name: Deploy to DEV
-       run: |
-             npm install -f
+   name: DEV Deployment
+   needs: deploymentjob
+   if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
+   runs-on: [self-hosted, dev-test]
+   steps:
+    - name: Debug
+      run: |
+        Write-Host "Environment from deploymentjob: ${{ needs.deploymentjob.outputs.env }}"
+    - name: Deploy to DEV
+      run: |
+        npm install -f
 
-  qa_deployment:
-      name: QA Deployment
-      needs: deploymentjob
-      if: ${{ needs.deploymentjob.outputs.env == 'QA' }}
-      runs-on: [self-hosted, qa-test]
-      steps:
-        - name: Deploy to QA
-          run: |
-          # Add steps to deploy to QA environment
+ # qa_deployment:
+ #      name: QA Deployment
+ #      needs: deploymentjob
+ #      if: ${{ needs.deploymentjob.outputs.env == 'QA' }}
+ #      runs-on: [self-hosted, qa-test]
+ #      steps:
+ #        - name: Deploy to QA
+ #          run: |
+ #          # Add steps to deploy to QA environment
