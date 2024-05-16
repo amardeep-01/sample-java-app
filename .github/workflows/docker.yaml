@@ -38,7 +38,9 @@ jobs:
       - name: docker swarm run
         run: |
          cd "C:\Users\amardeep.kini\demo"
-         docker stack deploy -c demo.yaml demo-app
+         # docker stack deploy -c demo.yaml demo-app
+         docker stack update demo-app -c demo.yaml
+
 
         
 
