@@ -1,0 +1,76 @@
+name: ACHIEVE-Service-CICD
+
+on:
+  push:
+    branches:
+      - '**' 
+    tags:   
+      - 'dev_v*'  
+      - 'uat_v*'    
+      - 'qa_v*'  
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Select Environment
+        options:
+          - DEV
+          - QA
+          - UAT
+
+jobs:
+  deploymentjob:
+    name: Deployment Job
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Determine Environment
+        id: env
+        if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+        run: |
+          Write-Host "Event Name: $env:GITHUB_EVENT_NAME"
+          Write-Host "Ref: $env:GITHUB_REF"
+          if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+            Write-Host "::set-output name=env::${{ github.event.inputs.environment }}"
+          } elseif ($env:GITHUB_REF -match '^refs/tags/') {
+            $TAG = $env:GITHUB_REF
+            Write-Host "Tag: $TAG"
+            if ($TAG -match '^refs/tags/dev_v*') {
+              $ENV = "DEV"
+              Write-Host "::set-output name=env::$ENV"
+            } elseif ($TAG -match '^refs/tags/qa_v*') {
+              $ENV = "QA"
+              Write-Host "Environment: $ENV"
+              Write-Host "::set-output name=env::$ENV"
+            }
+          }
+          Write-Host "ENV: $ENV"
+
+      - name: Build docker
+        run: docker build -t image1 .
+
+      - name: Save Docker image
+        run: docker save -o image1.tar image1:latest
+
+  dev_deployment:
+    name: DEV Deployment
+    needs: deploymentjob
+    if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
+    runs-on: [self-hosted, dev-test]
+    steps:
+      - name: Deploy to DEV
+        run: |
+          # Add steps to deploy to DEV environment
+
+  qa_deployment:
+    name: QA Deployment
+    needs: deploymentjob
+    if: ${{ needs.deploymentjob.outputs.env == 'QA' }}
+    runs-on: [self-hosted, qa-test]
+    steps:
+      - name: Deploy to QA
+        run: |
+          # Add steps to deploy to QA environment
