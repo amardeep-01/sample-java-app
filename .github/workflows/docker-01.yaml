@@ -1,10 +1,22 @@
-name: Deploy Based on Tag
- 
+name: ACHIEVE-Service-CICD
+
 on:
   push:
-    tags:
-      - 'dev-*'
-      - 'QA-*'
+    branches:
+      - '**' 
+    tags:   
+      - 'dev_v*'  
+      - 'uat_v*'    
+      - 'qa_v*'  
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Select Environment
+        options:
+          - DEV
+          - QA
+          - UAT
  
 jobs:
   deploy:
