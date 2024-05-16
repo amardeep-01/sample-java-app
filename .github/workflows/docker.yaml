@@ -36,7 +36,7 @@ jobs:
 
 
       - name: docker swarm run
-        run: docker stack deploy -c main.yaml demo-app
+        run: docker stack deploy -c demo.yaml demo-app
 
         
 
