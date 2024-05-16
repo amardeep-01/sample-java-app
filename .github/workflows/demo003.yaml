@@ -58,7 +58,7 @@ jobs:
     name: DEV Deployment
     needs: deploymentjob
     if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
-    runs-on: [self-hosted, dev-test]
+    runs-on: [self-hosted, qa-test]
     steps:
       - name: Deploy to DEV
         run: |
