@@ -49,11 +49,11 @@ jobs:
           }
           Write-Host "ENV: $ENV"
 
-      - name: Build docker
-        run: docker build -t image1 .
+      # - name: Build docker
+      #   run: docker build -t image1 .
 
-      - name: Save Docker image
-        run: docker save -o image1.tar image1:latest
+      # - name: Save Docker image
+      #   run: docker save -o image1.tar image1:latest
 
   dev_deployment:
     name: DEV Deployment
