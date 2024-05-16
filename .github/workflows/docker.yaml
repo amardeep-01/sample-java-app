@@ -29,6 +29,13 @@ jobs:
 
       - name: Build docker
         run: docker build -t image1 .
+
+
+      - name: Build docker
+        run: docker run -p 8081:8080 image1 
+
+
+        
       
   deploymentjob:
      name: Deployment Job
