@@ -23,6 +23,8 @@ jobs:
     name: Deployment Job
     if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
     runs-on: windows-latest
+    env:
+      ENV: ${{ github.event.inputs.environment }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -36,40 +38,38 @@ jobs:
           if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
             Write-Host "Setting Environment: DEV"
             $env:ENV = "DEV"
-            echo "ENV=$env:ENV" >> $env:GITHUB_ENV
           } elseif ($env:GITHUB_REF -match '^refs/tags/') {
             $TAG = $env:GITHUB_REF
             Write-Host "Tag: $TAG"
             if ($TAG -match '^refs/tags/dev_v*') {
               $ENV = "DEV"
               Write-Host "Detected Environment: $ENV"
-              $env:ENV = "DEV"
-              echo "ENV=$env:ENV" >> $env:GITHUB_ENV
             } elseif ($TAG -match '^refs/tags/qa_v*') {
               $ENV = "QA"
               Write-Host "Detected Environment: $ENV"
-              $env:ENV = "QA"
-              echo "ENV=$env:ENV" >> $env:GITHUB_ENV
             }
           }
           Write-Host "ENV: $env:ENV"
-       
+    outputs:
+      ENV: ${{ steps.env.outputs.ENV }}
+ 
   dev_deployment:
     name: DEV Deployment
     needs: deploymentjob
-    if: ${{ env.ENV == 'DEV' }}
+    if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
     runs-on: [self-hosted, dev-test]
     steps:
       - name: Deploy to DEV
         run: |
           # Add steps to deploy to DEV environment
+ 
   qa_deployment:
     name: QA Deployment
     needs: deploymentjob
-    if: ${{ needs.deploymentjob.outputs.env == 'QA' }}
+    if: ${{ needs.deploymentjob.outputs.ENV == 'QA' }}
     runs-on: [self-hosted, qa-test]
     steps:
       - name: Deploy to QA
         run: |
           # Add steps to deploy to QA environment
-
+ 
