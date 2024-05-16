@@ -31,26 +31,28 @@ jobs:
         id: env
         if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
         run: |
-            Write-Host "Event Name: $env:GITHUB_EVENT_NAME"
-            Write-Host "Ref: $env:GITHUB_REF"
-            if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
-              Write-Host "::set-output name=env::${{ github.event.inputs.environment }}"
-            } elseif ($env:GITHUB_REF -match '^refs/tags/') {
-              $TAG = $env:GITHUB_REF
-              Write-Host "Tag: $TAG"
-              if ($TAG -match '^refs/tags/dev_v*') {
-                $ENV = "DEV"
-                Write-Host "Detected Environment: $ENV"
-                Write-Host "::set-output name=env::$ENV"
-              } elseif ($TAG -match '^refs/tags/qa_v*') {
-                $ENV = "QA"
-                Write-Host "Detected Environment: $ENV"
-                Write-Host "::set-output name=env::$ENV"
-              }
+          Write-Host "Event Name: $env:GITHUB_EVENT_NAME"
+          Write-Host "Ref: $env:GITHUB_REF"
+          if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+            Write-Host "Setting Environment: DEV"
+            $env:ENV = "DEV"
+            $env:ENV | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          } elseif ($env:GITHUB_REF -match '^refs/tags/') {
+            $TAG = $env:GITHUB_REF
+            Write-Host "Tag: $TAG"
+            if ($TAG -match '^refs/tags/dev_v*') {
+              $ENV = "DEV"
+              Write-Host "Detected Environment: $ENV"
+              $env:ENV = "DEV"
+              $env:ENV | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            } elseif ($TAG -match '^refs/tags/qa_v*') {
+              $ENV = "QA"
+              Write-Host "Detected Environment: $ENV"
+              $env:ENV = "QA"
+              $env:ENV | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             }
-            Write-Host "ENV: $ENV"
-            echo "::set-output name=env::$ENV"  # Set the output for use in subsequent jobs
-
+          }
+          Write-Host "ENV: $env:ENV"
 
   dev_deployment:
     name: DEV Deployment
