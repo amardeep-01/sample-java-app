@@ -1,0 +1,31 @@
+name: Deploy to Environment
+ 
+on:
+  push:
+    branches:
+      - main
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+ 
+    strategy:
+      matrix:
+        environment:
+          - dev
+          - qa
+ 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+ 
+      - name: Deploy to Environment
+        run: |
+          if [ "${{ matrix.environment }}" = "dev" ]; then
+            echo "amardeep-dev"
+          elif [ "${{ matrix.environment }}" = "qa" ]; then
+             echo "amardeep-qa"
+          else
+            echo "Unsupported environment"
+            exit 1
+          fi
