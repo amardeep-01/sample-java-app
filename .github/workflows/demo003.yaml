@@ -36,7 +36,7 @@ jobs:
           if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
             Write-Host "Setting Environment: DEV"
             $env:ENV = "DEV"
-            $env:ENV | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            echo "ENV=$env:ENV" >> $env:GITHUB_ENV
           } elseif ($env:GITHUB_REF -match '^refs/tags/') {
             $TAG = $env:GITHUB_REF
             Write-Host "Tag: $TAG"
@@ -44,12 +44,12 @@ jobs:
               $ENV = "DEV"
               Write-Host "Detected Environment: $ENV"
               $env:ENV = "DEV"
-              $env:ENV | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+              echo "ENV=$env:ENV" >> $env:GITHUB_ENV
             } elseif ($TAG -match '^refs/tags/qa_v*') {
               $ENV = "QA"
               Write-Host "Detected Environment: $ENV"
               $env:ENV = "QA"
-              $env:ENV | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+              echo "ENV=$env:ENV" >> $env:GITHUB_ENV
             }
           }
           Write-Host "ENV: $env:ENV"
