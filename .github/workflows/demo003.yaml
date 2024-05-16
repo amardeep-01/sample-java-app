@@ -55,14 +55,14 @@ jobs:
           Write-Host "ENV: $env:ENV"
 
   dev_deployment:
-    name: DEV Deployment
-    needs: deploymentjob
-    if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
-    runs-on: self-hosted
-    steps:
-      - name: Debug ENV
-        run: |
-          Write-Host "ENV in dev_deployment: $env:ENV"
-      - name: Deploy to DEV
-        run: |
-          npm install -f
+   name: DEV Deployment
+   needs: deploymentjob
+   if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
+   runs-on: self-hosted
+   steps:
+    - name: Debug ENV
+      run: |
+        Write-Host "ENV in dev_deployment: $env:ENV"
+    - name: Deploy to DEV
+      run: |
+        npm install -f
