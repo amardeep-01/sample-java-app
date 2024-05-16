@@ -1,61 +1,30 @@
-name: ACHIEVE-Service-CICD
-
+name: Deploy Based on Tag
+ 
 on:
   push:
-    branches:
-      - '**' 
-    tags:   
-      - 'dev_v*'  
-      - 'uat_v*'    
-      - 'qa_v*'  
-  workflow_dispatch:
-    inputs:
-      environment:
-        type: choice
-        description: Select Environment
-        options:
-          - DEV
-          - QA
-          - UAT
-
+    tags:
+      - 'dev-*'
+      - 'QA-*'
+ 
 jobs:
-  deploymentjob:
-    name: Deployment Job
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
-    runs-on: ${{ if eq(steps.env.outputs.env, 'DEV') }} 
-                dev-test
-            ${{ else if eq(steps.env.outputs.env, 'QA') }}
-                qa-test
-            ${{ endif }}
+  deploy:
+    if: startsWith(github.ref, 'refs/tags/dev-') || startsWith(github.ref, 'refs/tags/QA-')
+    runs-on: ${{ startsWith(github.ref, 'refs/tags/dev-') && 'self-hosted' || startsWith(github.ref, 'refs/tags/QA-') && 'self-hosted' }}
+ 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        
-      - name: Determine Environment
-        id: env
-        if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+      - name: Determine Runner
+        id: determine-runner
         run: |
-          Write-Output "Event Name: $env:GITHUB_EVENT_NAME"
-          Write-Output "Ref: $env:GITHUB_REF"
-          if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
-            Write-Output "::set-output name=env::${{ github.event.inputs.environment }}"
-          } elseif ($env:GITHUB_REF -match '^refs/tags/') {
-            $TAG = $env:GITHUB_REF
-            Write-Output "Tag: $TAG"
-            if ($TAG -match '^refs/tags/dev_v*') {
-              $ENV = "DEV"
-              Write-Output "::set-output name=env::$ENV"
-            } elseif ($TAG -match '^refs/tags/qa_v*') {
-              $ENV = "QA"
-              Write-Output "Environment: $ENV"
-              Write-Output "::set-output name=env::$ENV"
-            }
-          }
-
-          Write-Output "ENV: $ENV"
-      
-      - name: Build docker
-        run: docker build -t image1 .
-
-      - name: Save Docker image
-        run: docker save -o image1.tar image1:latest
+          if [[ "${GITHUB_REF}" == refs/tags/dev-* ]]; then
+            echo "::set-output name=runner::dev"
+          elif [[ "${GITHUB_REF}" == refs/tags/QA-* ]]; then
+            echo "::set-output name=runner::QA"
+          fi
+ 
+      - name: Checkout code
+        uses: actions/checkout@v2
+ 
+      - name: Deploy to Environment
+        run: |
+          echo "Deploying to ${{ steps.determine-runner.outputs.runner }} Environment"
+          # Your deployment script or commands for the environment
