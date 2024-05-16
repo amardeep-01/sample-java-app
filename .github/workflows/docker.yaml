@@ -32,7 +32,13 @@ jobs:
 
 
       - name: Build docker
-        run: docker run -p 8081:8080 image1 
+        run: docker save -o image1.tar image1:latest
+
+
+      - name: docker swarm run
+        run: docker stack deploy -c main.yaml demo-app
+
+        
 
 
         
