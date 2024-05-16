@@ -54,15 +54,22 @@ jobs:
           }
           Write-Host "ENV: $env:ENV"
          
-          dev_deployment:
-          name: DEV Deployment
-          needs: deploymentjob
-          if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
-          runs-on: self-hosted
-          steps:
-            - name: Debug ENV
-              run: |
-                Write-Host "ENV in dev_deployment: $env:ENV"
-            - name: Deploy to DEV
-              run: |
-                npm install -f
+         
+  dev_deployment:
+    name: DEV Deployment
+    needs: deploymentjob
+    if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
+    runs-on: [self-hosted, dev-test]
+    steps:
+      - name: Deploy to DEV
+        run: |
+          # Add steps to deploy to DEV environment
+  qa_deployment:
+    name: QA Deployment
+    needs: deploymentjob
+    if: ${{ needs.deploymentjob.outputs.env == 'QA' }}
+    runs-on: [self-hosted, qa-test]
+    steps:
+      - name: Deploy to QA
+        run: |
+          # Add steps to deploy to QA environment
