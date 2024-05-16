@@ -74,4 +74,4 @@ jobs:
       - name: Deploy to QA
         run: |
           # Add steps to deploy to QA environment
-has context menu
+
