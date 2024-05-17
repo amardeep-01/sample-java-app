@@ -59,7 +59,7 @@ jobs:
     needs: deploymentjob
     env:
       OUTPUT1: ${{ needs.deploymentjob.outputs.output1 }}
-    runs-on: [self-hosted, dev-test]
+    runs-on: [self-hosted, qa-test]
     steps:
       - name: Deploy to DEV
         run: |
