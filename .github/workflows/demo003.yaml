@@ -63,7 +63,7 @@ jobs:
     steps:
       - name: Deploy to DEV
         run: |
-          echo ${{env.OUTPUT1}}
+          echo "${{ needs.deploymentjob.outputs.output1 }}"
  
   qa_deployment:
     name: QA Deployment
