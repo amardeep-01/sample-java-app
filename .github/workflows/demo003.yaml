@@ -52,7 +52,7 @@ jobs:
             }
           }
           #Write-Host "ENV: $env:ENV"
-          echo "ENV=${{ steps.env.outcome }}" >> "$ENV:GITHUB_OUTPUT"
+          #echo "ENV=${{ steps.env.outcome }}" >> "$ENV:GITHUB_OUTPUT"
  
   dev_deployment:
     name: DEV Deployment
