@@ -51,7 +51,7 @@ jobs:
               Write-Host "Detected Environment: $ENV"
             }
           }
-          Write-Host "ENV: $env:ENV"
+          #Write-Host "ENV: $env:ENV"
           echo "ENV=${{ steps.env.outcome }}" >> $ENV:GITHUB_OUTPUT
  
   dev_deployment:
