@@ -52,18 +52,17 @@ jobs:
             }
           }
           #Write-Host "ENV: $env:ENV"
-          echo "ENV=${{ steps.env.outcome }}" >> $ENV:GITHUB_OUTPUT
+          echo "ENV=${{ steps.env.outcome }}" >> "$GITHUB_OUTPUT"
  
   dev_deployment:
     name: DEV Deployment
     needs: deploymentjob
-    env:
-      OUTPUT1: ${{ needs.deploymentjob.outputs.output1 }}
     runs-on: [self-hosted, qa-test]
     steps:
-      - name: Deploy to DEV
-        run: |
-          echo "${{ needs.deploymentjob.outputs.output1 }}"
+      - env:
+         OUTPUT1: ${{ needs.deploymentjob.outputs.output1 }}
+        run: echo "$OUTPUT1" 
+      
  
   qa_deployment:
     name: QA Deployment
