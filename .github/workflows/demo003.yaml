@@ -60,6 +60,7 @@ jobs:
   dev_deployment:
     name: DEV Deployment
     needs: deploymentjob
+    if: ${{ needs.deploymentjob.outputs.ENV == 'test' }}
     runs-on: [self-hosted, qa-test]
     steps:
       - env:
