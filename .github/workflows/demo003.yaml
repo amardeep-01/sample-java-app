@@ -59,12 +59,11 @@ jobs:
     needs: deploymentjob
     env:
       OUTPUT1: ${{ needs.deploymentjob.outputs.output1 }}
-    if: env.OUTPUT1 == "DEV"
     runs-on: [self-hosted, dev-test]
     steps:
       - name: Deploy to DEV
         run: |
-          # Add steps to deploy to DEV environment
+          echo ${{env.OUTPUT1}}
  
   qa_deployment:
     name: QA Deployment
