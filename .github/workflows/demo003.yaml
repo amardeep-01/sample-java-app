@@ -24,35 +24,35 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
     outputs:
       output1: ${{ steps.value.outputs.ENV }}
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     env:
       ENV: ${{ github.event.inputs.environment }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
  
-      - name: Determine Environment
-        id: env
-        if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
-        run: |
-          Write-Host "Event Name: $env:GITHUB_EVENT_NAME"
-          Write-Host "Ref: $env:GITHUB_REF"
-          if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
-            Write-Host "Setting Environment: DEV"
-            $env:ENV = "DEV"
-          } elseif ($env:GITHUB_REF -match '^refs/tags/') {
-            $TAG = $env:GITHUB_REF
-            Write-Host "Tag: $TAG"
-            if ($TAG -match '^refs/tags/dev_v*') {
-              $ENV = "DEV"
-              Write-Host "Detected Environment: $ENV"
-            } elseif ($TAG -match '^refs/tags/qa_v*') {
-              $ENV = "QA"
-              Write-Host "Detected Environment: $ENV"
-            }
-          }
-          #Write-Host "ENV: $env:ENV"
-          echo "ENV=test" >> "$GITHUB_OUTPUT"
+      # - name: Determine Environment
+      #   id: env
+      #   if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+      #   run: |
+      #     Write-Host "Event Name: $env:GITHUB_EVENT_NAME"
+      #     Write-Host "Ref: $env:GITHUB_REF"
+      #     if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+      #       Write-Host "Setting Environment: DEV"
+      #       $env:ENV = "DEV"
+      #     } elseif ($env:GITHUB_REF -match '^refs/tags/') {
+      #       $TAG = $env:GITHUB_REF
+      #       Write-Host "Tag: $TAG"
+      #       if ($TAG -match '^refs/tags/dev_v*') {
+      #         $ENV = "DEV"
+      #         Write-Host "Detected Environment: $ENV"
+      #       } elseif ($TAG -match '^refs/tags/qa_v*') {
+      #         $ENV = "QA"
+      #         Write-Host "Detected Environment: $ENV"
+      #       }
+      #     }
+      #     #Write-Host "ENV: $env:ENV"
+      #     echo "ENV=test" >> "$GITHUB_OUTPUT"
       - name: Determine Environment
         id: value
         run: echo "ENV=test" >> "$GITHUB_OUTPUT"    
