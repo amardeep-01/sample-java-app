@@ -22,6 +22,8 @@ jobs:
   deploymentjob:
     name: Deployment Job
     if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    outputs:
+      output1: ${{ steps.env.outputs.ENV }}
     runs-on: windows-latest
     env:
       ENV: ${{ github.event.inputs.environment }}
@@ -55,7 +57,9 @@ jobs:
   dev_deployment:
     name: DEV Deployment
     needs: deploymentjob
-    if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
+    env:
+      OUTPUT1: '${{needs.deploymentjob.outputs.output1}}'
+    if: ${{ ${{ env.OUTPUT1 }} == 'DEV' }}
     runs-on: [self-hosted, dev-test]
     steps:
       - name: Deploy to DEV
