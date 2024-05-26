@@ -53,7 +53,7 @@
 #   dev_deployment:
 #     name: DEV Deployment
 #     needs: deploymentjob
-#     if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
+#     if: ${{ steps.determine_environment.outputs.env== 'DEV' }}
 #     runs-on: windows-latest
 #     steps:
 #       - name: Checkout Repository
