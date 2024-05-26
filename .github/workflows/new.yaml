@@ -56,7 +56,7 @@ jobs:
     name: DEV Deployment
     needs: deploymentjob
     if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
-    runs-on: self-hosted
+    runs-on: [self-hosted,qa]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
