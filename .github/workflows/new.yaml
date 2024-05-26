@@ -138,16 +138,17 @@ jobs:
 
 
   dev_deployment:
-       name: DEV Deployment
-       needs: deploymentjob
-       if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
-       runs-on: self-hosted
-       steps:
-              - name: Checkout Repository
-                uses: actions/checkout@v2
-              - name: Deploy to DEV
-                run: |
-                  echo "Deploying to DEV environment"
+   name: DEV Deployment
+   needs: deploymentjob
+   if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
+   runs-on: self-hosted
+   steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Deploy to DEV
+      run: |
+        echo "Deploying to DEV environment"
+
 
 
   qa_deployment:
