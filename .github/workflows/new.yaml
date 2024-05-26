@@ -33,17 +33,19 @@ jobs:
         id: determine_environment
         if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
         run: |
-          echo "Event Name: $GITHUB_EVENT_NAME"
+         echo "Event Name: $GITHUB_EVENT_NAME"
           echo "Ref: $GITHUB_REF"
-          if [ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]; then
-            echo "::set-output name=env::${{ github.event.inputs.environment }}"
-          elif [[ "$GITHUB_REF" =~ ^refs/tags/dev_v.* ]]; then
+          if ($GITHUB_EVENT_NAME -eq "workflow_dispatch") {
             echo "::set-output name=env::DEV"
-          elif [[ "$GITHUB_REF" =~ ^refs/tags/uat_v.* ]]; then
+          } elseif ($GITHUB_REF -match '^refs/tags/dev_v.*') {
+            echo "::set-output name=env::DEV"
+          } elseif ($GITHUB_REF -match '^refs/tags/uat_v.*') {
             echo "::set-output name=env::UAT"
-          elif [[ "$GITHUB_REF" =~ ^refs/tags/qa_v.* ]]; then
+          } elseif ($GITHUB_REF -match '^refs/tags/qa_v.*') {
             echo "::set-output name=env::QA"
-          fi
+          }
+
+         
 
   dev_deployment:
     name: DEV Deployment
