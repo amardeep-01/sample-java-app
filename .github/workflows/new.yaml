@@ -133,6 +133,9 @@ jobs:
                 echo "::set-output name=env::QA"
               }
 
+      - name: Debug Environment
+        run: echo "Determined Environment:${{ steps.determine_environment.outputs.env }}"     
+
 
   
   dev_deployment:
