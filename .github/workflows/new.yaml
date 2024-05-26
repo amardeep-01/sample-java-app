@@ -1,3 +1,93 @@
+# name: ACHIEVE-Service-CICD
+
+# on:
+#   push:
+#     branches:
+#       - '**'
+#     tags:  
+#       - 'dev_v*'  
+#       - 'uat_v*'    
+#       - 'qa_v*'  
+#   workflow_dispatch:
+#     inputs:
+#       environment:
+#         type: choice
+#         description: Select Environment
+#         options:
+#           - DEV
+#           - QA
+#           - UAT
+
+# jobs:
+#   deploymentjob:
+#     name: Deployment Job
+#     if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+#     outputs:
+#       ENV: ${{ steps.determine_environment.outputs.env }}
+#     runs-on: windows-latest
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v2
+
+#       - name: Determine Environment
+#         id: determine_environment
+#         if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+#         run: |
+#          $envName = $env:GITHUB_EVENT_NAME
+#           $ref = $env:GITHUB_REF
+          
+#           echo "Event Name: $envName"
+#           echo "Ref: $ref"
+          
+#           if ($envName -eq "workflow_dispatch") {
+#             echo "::set-output name=env::DEV"
+#           } elseif ($ref -match '^refs/tags/dev_v.*') {
+#             echo "::set-output name=env::DEV"
+#           } elseif ($ref -match '^refs/tags/uat_v.*') {
+#             echo "::set-output name=env::UAT"
+#           } elseif ($ref -match '^refs/tags/qa_v.*') {
+#             echo "::set-output name=env::QA"
+#           }
+
+
+#   dev_deployment:
+#     name: DEV Deployment
+#     needs: deploymentjob
+#     if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
+#     runs-on: windows-latest
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v2
+#       - name: Deploy to DEV
+#         if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}  # Correcting the condition here
+#         run: |
+#           echo "Deploying to DEV environment"
+        
+
+#   # dev_deployment:
+#   #   name: DEV Deployment
+#   #   needs: deploymentjob
+#   #   if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
+#   #   runs-on: windows-latest
+#   #   steps:
+#   #     - name: Checkout Repository
+#   #       uses: actions/checkout@v2
+#   #     - name: Deploy to DEV
+#   #       run: |
+#   #         echo "Deploying to DEV environment"
+
+#   qa_deployment:
+#     name: QA Deployment
+#     needs: deploymentjob
+#     if: ${{ needs.deploymentjob.outputs.ENV == 'QA' }}
+#     runs-on: windows-latest
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v2
+#       - name: Deploy to QA
+#         run: |
+#           echo "Deploying to QA environment"
+
 name: ACHIEVE-Service-CICD
 
 on:
@@ -22,8 +112,6 @@ jobs:
   deploymentjob:
     name: Deployment Job
     if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
-    outputs:
-      ENV: ${{ steps.determine_environment.outputs.env }}
     runs-on: windows-latest
     steps:
       - name: Checkout Repository
@@ -33,53 +121,34 @@ jobs:
         id: determine_environment
         if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
         run: |
-         $envName = $env:GITHUB_EVENT_NAME
-          $ref = $env:GITHUB_REF
-          
-          echo "Event Name: $envName"
-          echo "Ref: $ref"
-          
-          if ($envName -eq "workflow_dispatch") {
+          echo "Event Name: $GITHUB_EVENT_NAME"
+          echo "Ref: $GITHUB_REF"
+          if [ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]; then
+            echo "::set-output name=env::${{ github.event.inputs.environment }}"
+          elif [[ "$GITHUB_REF" =~ ^refs/tags/dev_v.* ]]; then
             echo "::set-output name=env::DEV"
-          } elseif ($ref -match '^refs/tags/dev_v.*') {
-            echo "::set-output name=env::DEV"
-          } elseif ($ref -match '^refs/tags/uat_v.*') {
+          elif [[ "$GITHUB_REF" =~ ^refs/tags/uat_v.* ]]; then
             echo "::set-output name=env::UAT"
-          } elseif ($ref -match '^refs/tags/qa_v.*') {
+          elif [[ "$GITHUB_REF" =~ ^refs/tags/qa_v.* ]]; then
             echo "::set-output name=env::QA"
-          }
-
+          fi
 
   dev_deployment:
     name: DEV Deployment
     needs: deploymentjob
-    if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
+    if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
     runs-on: windows-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Deploy to DEV
-        if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}  # Correcting the condition here
         run: |
           echo "Deploying to DEV environment"
-        
-
-  # dev_deployment:
-  #   name: DEV Deployment
-  #   needs: deploymentjob
-  #   if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
-  #   runs-on: windows-latest
-  #   steps:
-  #     - name: Checkout Repository
-  #       uses: actions/checkout@v2
-  #     - name: Deploy to DEV
-  #       run: |
-  #         echo "Deploying to DEV environment"
 
   qa_deployment:
     name: QA Deployment
     needs: deploymentjob
-    if: ${{ needs.deploymentjob.outputs.ENV == 'QA' }}
+    if: ${{ needs.deploymentjob.outputs.env == 'QA' }}
     runs-on: windows-latest
     steps:
       - name: Checkout Repository
@@ -87,3 +156,4 @@ jobs:
       - name: Deploy to QA
         run: |
           echo "Deploying to QA environment"
+
