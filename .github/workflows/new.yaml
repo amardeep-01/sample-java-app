@@ -50,8 +50,6 @@ jobs:
           }
 
 
-         
-
   dev_deployment:
     name: DEV Deployment
     needs: deploymentjob
@@ -61,8 +59,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Deploy to DEV
+        if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}  # Correcting the condition here
         run: |
           echo "Deploying to DEV environment"
+        
+
+  # dev_deployment:
+  #   name: DEV Deployment
+  #   needs: deploymentjob
+  #   if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v2
+  #     - name: Deploy to DEV
+  #       run: |
+  #         echo "Deploying to DEV environment"
 
   qa_deployment:
     name: QA Deployment
