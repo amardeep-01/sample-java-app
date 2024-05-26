@@ -1,0 +1,70 @@
+name: ACHIEVE-Service-CICD
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:  
+      - 'dev_v*'  
+      - 'uat_v*'    
+      - 'qa_v*'  
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Select Environment
+        options:
+          - DEV
+          - QA
+          - UAT
+
+jobs:
+  deploymentjob:
+    name: Deployment Job
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    outputs:
+      ENV: ${{ steps.determine_environment.outputs.env }}
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Determine Environment
+        id: determine_environment
+        if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo "Event Name: $GITHUB_EVENT_NAME"
+          echo "Ref: $GITHUB_REF"
+          if [ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]; then
+            echo "::set-output name=env::${{ github.event.inputs.environment }}"
+          elif [[ "$GITHUB_REF" =~ ^refs/tags/dev_v.* ]]; then
+            echo "::set-output name=env::DEV"
+          elif [[ "$GITHUB_REF" =~ ^refs/tags/uat_v.* ]]; then
+            echo "::set-output name=env::UAT"
+          elif [[ "$GITHUB_REF" =~ ^refs/tags/qa_v.* ]]; then
+            echo "::set-output name=env::QA"
+          fi
+
+  dev_deployment:
+    name: DEV Deployment
+    needs: deploymentjob
+    if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Deploy to DEV
+        run: |
+          echo "Deploying to DEV environment"
+
+  qa_deployment:
+    name: QA Deployment
+    needs: deploymentjob
+    if: ${{ needs.deploymentjob.outputs.ENV == 'QA' }}
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Deploy to QA
+        run: |
+          echo "Deploying to QA environment"
