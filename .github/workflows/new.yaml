@@ -56,7 +56,7 @@ jobs:
     name: DEV Deployment
     needs: deploymentjob
     if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
-    runs-on: [self-hosted, qa-test]
+    runs-on: windows-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -68,7 +68,7 @@ jobs:
     name: QA Deployment
     needs: deploymentjob
     if: ${{ needs.deploymentjob.outputs.ENV == 'QA' }}
-    runs-on: [self-hosted, qa-test]
+    runs-on: windows-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
