@@ -140,7 +140,7 @@ jobs:
   dev_deployment:
    name: DEV Deployment
    needs: deploymentjob
-   if: ${{ needs.deploymentjob.outputs.env == 'DEV' }}
+   if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
    runs-on: self-hosted
    steps:
     - name: Checkout Repository
