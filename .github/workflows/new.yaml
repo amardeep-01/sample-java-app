@@ -124,7 +124,7 @@ jobs:
               echo "Event Name: $env:GITHUB_EVENT_NAME"
               echo "Ref: $env:GITHUB_REF"
               if ($env:GITHUB_EVENT_NAME -eq "workflow_dispatch") {
-                echo "::set-output name=env::DEV"
+                echo "::set-output name=env::${{ github.event.inputs.environment }}"
               } elseif ($env:GITHUB_REF -match '^refs/tags/dev_v.*') {
                 echo "::set-output name=env::DEV"
               } elseif ($env:GITHUB_REF -match '^refs/tags/uat_v.*') {
