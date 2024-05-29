@@ -134,8 +134,10 @@ jobs:
               }
 
       - name: Debug Environment
-        run: echo "Determined Environment:${{ steps.determine_environment.outputs.env }}"     
-
+        if: ${{ needs.deploymentjob.outputs.ENV == 'DEV' }}
+        run: |
+         echo "Determined Environment:${{ steps.determine_environment.outputs.env }}"     
+         echo "echo deploying to dev"
 
   # dev_deployment:
   #  name: DEV Deployment
